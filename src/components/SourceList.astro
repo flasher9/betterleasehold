@@ -1,0 +1,44 @@
+---
+interface Source {
+  title: string;
+  url: string;
+  licence: 'ogl-v3' | 'legislation' | 'other';
+  note?: string;
+}
+
+const { sources } = Astro.props as { sources: Source[] };
+const usesOgl = sources.some((s) => s.licence === 'ogl-v3' || s.licence === 'legislation');
+
+const licenceLabel: Record<Source['licence'], string> = {
+  'ogl-v3': 'Open Government Licence v3.0',
+  legislation: 'legislation.gov.uk Open Government Licence v3.0',
+  other: '',
+};
+---
+
+<section class="sources" aria-labelledby="sources-heading">
+  <h2 id="sources-heading">Sources</h2>
+  <ol>
+    {
+      sources.map((s) => (
+        <li>
+          <a href={s.url} rel="noopener nofollow">
+            {s.title}
+          </a>
+          {s.note && <span> {s.note}</span>}
+          {licenceLabel[s.licence] && <span class="licence">{licenceLabel[s.licence]}</span>}
+        </li>
+      ))
+    }
+  </ol>
+  {
+    usesOgl && (
+      <p class="attribution">
+        This page contains public sector information licensed under the Open Government
+        Licence v3.0. It has been summarised and re-written by Better Leasehold; any
+        errors are ours. Reproduction here does not imply endorsement by the Leasehold
+        Advisory Service or by any government department.
+      </p>
+    )
+  }
+</section>

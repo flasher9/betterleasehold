@@ -1,0 +1,581 @@
+/* ---------------------------------------------------------------------------
+   betterleasehold.co.uk design tokens
+
+   Palette reads from the material: lease deeds, land registry plans, statutory
+   notices. Cool paper rather than cream, a deep registry green for anything
+   structural or interactive, and a single oxblood reserved exclusively for
+   statutory deadlines and risk. Nothing else is allowed to be red.
+   --------------------------------------------------------------------------- */
+
+:root {
+  --paper: #f1f3ef;
+  --paper-raised: #ffffff;
+  --wash: #e3e8e1;
+  --ink: #1a2b25;
+  --ink-soft: #4d5b55;
+  --rule: #c6cec7;
+  --seal: #0e4f3c;
+  --seal-bright: #12695a;
+  --flag: #8a2b22;
+
+  --sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --serif: 'Literata Variable', Literata, Georgia, serif;
+
+  /* Type scale, 1.25 from a 19px base. */
+  --t-xs: 0.7rem;
+  --t-sm: 0.82rem;
+  --t-base: 1rem;
+  --t-md: 1.2rem;
+  --t-lg: 1.5rem;
+  --t-xl: 1.9rem;
+  --t-2xl: 2.4rem;
+  --t-3xl: 3rem;
+
+  --measure: 34rem;
+  --gutter: clamp(1.25rem, 5vw, 3rem);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 19px;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (max-width: 40rem) {
+  html {
+    font-size: 17px;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: var(--t-base);
+  line-height: 1.65;
+  font-optical-sizing: auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--sans);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.011em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--t-2xl);
+  margin: 0 0 0.6rem;
+}
+h2 {
+  font-size: var(--t-lg);
+  margin: 2.6rem 0 0.7rem;
+}
+h3 {
+  font-size: var(--t-md);
+  margin: 2rem 0 0.5rem;
+}
+
+p,
+ul,
+ol {
+  max-width: var(--measure);
+}
+
+a {
+  color: var(--seal);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--seal);
+  outline-offset: 3px;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+}
+.skip:focus {
+  left: var(--gutter);
+  top: 0.5rem;
+  z-index: 20;
+  background: var(--paper-raised);
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--ink);
+}
+
+.shell {
+  max-width: 62rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* --- header ------------------------------------------------------------- */
+
+.masthead {
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+}
+
+.masthead__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem 2rem;
+  padding-block: 1.1rem;
+}
+
+.wordmark {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: var(--t-md);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.wordmark span {
+  color: var(--seal);
+}
+
+.nav {
+  display: flex;
+  gap: 1.4rem;
+  margin-left: auto;
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+}
+
+.nav a {
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.nav a:hover,
+.nav a[aria-current='page'] {
+  color: var(--seal);
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+/* --- home hero ---------------------------------------------------------- */
+
+.hero {
+  padding-block: clamp(2.5rem, 7vw, 4.5rem) 1rem;
+}
+
+.hero h1 {
+  font-size: var(--t-3xl);
+  max-width: 16ch;
+}
+
+.hero__lede {
+  font-size: var(--t-md);
+  color: var(--ink-soft);
+  max-width: 32rem;
+}
+
+/* --- eligibility checker ------------------------------------------------ */
+
+.checker {
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--seal);
+  padding: 1.6rem var(--gutter) 1.8rem;
+  margin-block: 2rem 3rem;
+}
+
+.checker h2 {
+  margin-top: 0;
+  font-size: var(--t-md);
+}
+
+.checker__intro {
+  color: var(--ink-soft);
+  font-size: var(--t-sm);
+  font-family: var(--sans);
+  max-width: 40rem;
+}
+
+.q {
+  border: 0;
+  padding: 0;
+  margin: 1.6rem 0 0;
+  max-width: 40rem;
+}
+
+.q legend {
+  font-family: var(--sans);
+  font-weight: 500;
+  padding: 0;
+  margin-bottom: 0.55rem;
+}
+
+.q__hint {
+  display: block;
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+  font-weight: 400;
+  color: var(--ink-soft);
+  margin-top: 0.25rem;
+}
+
+.opts {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.opts label {
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  padding: 0.35rem 0.95rem;
+  cursor: pointer;
+}
+
+.opts input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.opts input:checked + span {
+  font-weight: 600;
+}
+
+.opts label:has(input:checked) {
+  border-color: var(--seal);
+  background: var(--wash);
+  color: var(--seal);
+}
+
+.opts label:has(input:focus-visible) {
+  outline: 2px solid var(--seal);
+  outline-offset: 2px;
+}
+
+.verdict {
+  margin-top: 1.8rem;
+  padding: 1rem 1.1rem;
+  border-left: 3px solid var(--rule);
+  background: var(--paper);
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+  max-width: 40rem;
+}
+
+.verdict[data-state='likely'] {
+  border-left-color: var(--seal);
+}
+.verdict[data-state='blocked'] {
+  border-left-color: var(--flag);
+}
+
+.verdict p {
+  margin: 0;
+  max-width: none;
+}
+
+.verdict strong {
+  display: block;
+  font-size: var(--t-base);
+  margin-bottom: 0.3rem;
+}
+
+/* --- process rail ------------------------------------------------------- */
+
+.rail {
+  list-style: none;
+  margin: 2rem 0;
+  padding: 0;
+  max-width: 40rem;
+}
+
+.rail li {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr;
+  gap: 1.2rem;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--rule);
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+}
+
+.rail li:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+.rail__clock {
+  color: var(--flag);
+  font-variant-numeric: tabular-nums;
+}
+
+.rail__clock--none {
+  color: var(--ink-soft);
+}
+
+.rail__what {
+  color: var(--ink);
+}
+
+.rail__what a {
+  text-decoration: none;
+}
+.rail__what a:hover {
+  text-decoration: underline;
+}
+
+.rail__cite {
+  display: block;
+  color: var(--ink-soft);
+  font-size: var(--t-xs);
+  margin-top: 0.15rem;
+}
+
+.rail li[data-current='true'] {
+  background: var(--wash);
+  box-shadow: -0.7rem 0 0 var(--wash), 0.7rem 0 0 var(--wash);
+}
+
+/* --- guide page --------------------------------------------------------- */
+
+.guide {
+  display: grid;
+  gap: 0 3rem;
+  padding-block: 2.5rem 4rem;
+}
+
+@media (min-width: 62rem) {
+  .guide {
+    grid-template-columns: minmax(0, 1fr) 13rem;
+  }
+  .guide__aside {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    position: sticky;
+    top: 2rem;
+    align-self: start;
+  }
+}
+
+.guide__body h2 {
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--rule);
+  max-width: var(--measure);
+}
+
+.guide__body li {
+  margin-bottom: 0.35rem;
+}
+
+.guide__body blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--flag);
+  color: var(--ink-soft);
+  max-width: var(--measure);
+}
+
+.stamp {
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding-block: 0.5rem;
+  margin-block: 1.5rem 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1.5rem;
+}
+
+.stamp time {
+  font-variant-numeric: tabular-nums;
+}
+
+.aside__title {
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  color: var(--ink-soft);
+  margin: 0 0 0.5rem;
+  font-weight: 500;
+}
+
+.aside__list {
+  list-style: none;
+  margin: 0 0 2rem;
+  padding: 0;
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+}
+
+.aside__list li {
+  padding: 0.3rem 0;
+}
+
+.aside__list a {
+  text-decoration: none;
+  color: var(--ink-soft);
+}
+
+.aside__list a:hover,
+.aside__list a[aria-current='page'] {
+  color: var(--seal);
+  text-decoration: underline;
+}
+
+/* --- sources ------------------------------------------------------------ */
+
+.sources {
+  margin-top: 3.5rem;
+  padding-top: 1.2rem;
+  border-top: 2px solid var(--ink);
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+  max-width: var(--measure);
+}
+
+.sources h2 {
+  font-size: var(--t-base);
+  margin: 0 0 0.7rem;
+  border: 0;
+  padding: 0;
+}
+
+.sources ol {
+  padding-left: 1.1rem;
+  margin: 0;
+}
+
+.sources li {
+  margin-bottom: 0.5rem;
+}
+
+.sources .licence {
+  color: var(--ink-soft);
+  font-size: var(--t-xs);
+  display: block;
+}
+
+.attribution {
+  margin-top: 1.2rem;
+  color: var(--ink-soft);
+  font-size: var(--t-xs);
+  line-height: 1.5;
+}
+
+/* --- callouts ----------------------------------------------------------- */
+
+.note {
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--flag);
+  background: var(--paper-raised);
+  padding: 0.9rem 1.1rem;
+  margin-block: 1.6rem;
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+  max-width: var(--measure);
+}
+
+.note p:last-child {
+  margin-bottom: 0;
+}
+
+.note p:first-child {
+  margin-top: 0;
+}
+
+/* --- cards on index pages ---------------------------------------------- */
+
+.cards {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0 0;
+  max-width: none;
+  display: grid;
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+}
+
+@media (min-width: 46rem) {
+  .cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.cards li {
+  background: var(--paper-raised);
+  padding: 1.2rem 1.3rem;
+}
+
+.cards h3 {
+  margin: 0 0 0.3rem;
+  font-size: var(--t-base);
+}
+
+.cards h3 a {
+  text-decoration: none;
+}
+
+.cards h3 a:hover {
+  text-decoration: underline;
+}
+
+.cards p {
+  margin: 0;
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+  font-family: var(--sans);
+}
+
+/* --- footer ------------------------------------------------------------- */
+
+.colophon {
+  border-top: 1px solid var(--rule);
+  background: var(--wash);
+  padding-block: 2.5rem 3rem;
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+}
+
+.colophon p {
+  max-width: 42rem;
+}
+
+.colophon a {
+  color: var(--seal);
+}
+
+.colophon__disclaimer {
+  border-left: 3px solid var(--flag);
+  padding-left: 1rem;
+  margin-bottom: 1.8rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

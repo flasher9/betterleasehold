@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://betterleasehold.co.uk/sitemap-index.xml

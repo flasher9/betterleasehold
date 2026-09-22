@@ -1,0 +1,74 @@
+---
+/**
+ * The statutory sequence. `clock` is the interval the Act attaches to the step,
+ * which is the thing leaseholders actually get wrong so it gets the colour.
+ */
+const steps = [
+  {
+    clock: null,
+    what: 'Check the building qualifies',
+    href: '/right-to-manage/eligibility/',
+    cite: 'CLRA 2002, ss.72-75',
+  },
+  {
+    clock: null,
+    what: 'Incorporate the RTM company',
+    href: '/right-to-manage/rtm-company/',
+    cite: 'CLRA 2002, s.73; model articles',
+  },
+  {
+    clock: 'at least 14 days before the claim notice',
+    what: 'Serve the notice of invitation to participate on every qualifying tenant who is not already a member',
+    href: '/right-to-manage/the-process/',
+    cite: 'CLRA 2002, s.78',
+  },
+  {
+    clock: 'day 0',
+    what: 'Serve the claim notice on the landlord, any manager and any third party to the leases',
+    href: '/right-to-manage/the-process/',
+    cite: 'CLRA 2002, ss.79-80',
+  },
+  {
+    clock: 'within 1 month',
+    what: 'Landlord may serve a counter-notice admitting or disputing the claim',
+    href: '/right-to-manage/the-process/',
+    cite: 'CLRA 2002, s.84',
+  },
+  {
+    clock: 'within 2 months of a disputing counter-notice',
+    what: 'Apply to the First-tier Tribunal for a determination, or the claim is deemed withdrawn',
+    href: '/right-to-manage/the-process/',
+    cite: 'CLRA 2002, s.84(3)',
+  },
+  {
+    clock: 'not less than 3 months after the counter-notice date',
+    what: 'Acquisition date management functions transfer to the RTM company',
+    href: '/right-to-manage/the-process/',
+    cite: 'CLRA 2002, s.90',
+  },
+  {
+    clock: 'within 14 days of a request',
+    what: 'Landlord hands over accrued uncommitted service charges and contract information',
+    href: '/right-to-manage/handover/',
+    cite: 'CLRA 2002, ss.92-94',
+  },
+];
+
+const { current = -1 } = Astro.props as { current?: number };
+---
+
+<ol class="rail">
+  {
+    steps.map((s, i) => (
+      <li data-current={i === current ? 'true' : undefined}>
+        <span class={s.clock ? 'rail__clock' : 'rail__clock rail__clock--none'}>
+          {s.clock ?? '—'}
+        </span>
+        <span class="rail__what">
+          <a href={s.href}>{s.what}</a>
+          <span class="rail__cite">{s.cite}</span>
+        </span>
+      </li>
+    ))
+  }
+</ol>

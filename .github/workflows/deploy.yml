@@ -1,0 +1,46 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      # Uploads dist/ over encrypted FTPS using a restricted FTP account.
+      # That account can only see betterleasehold.co.uk's folder, so it
+      # cannot touch any other website on the hosting account.
+      #
+      # Only changed files are sent. A small tracking file
+      # (.ftp-deploy-sync-state.json) is kept on the server to remember what
+      # was uploaded last time. Files this action never uploaded - such as
+      # .well-known, used for SSL renewal - are never deleted.
+      #
+      # FIRST RUN: dry-run is true. The log lists what WOULD happen without
+      # changing anything. When it looks right, change it to false, commit
+      # and push again.
+      - name: Upload to Krystal
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          security: strict
+          local-dir: ./dist/
+          # The restricted account logs straight into the document root,
+          # so "./" means "the site's own folder".
+          server-dir: ./
+          dry-run: true

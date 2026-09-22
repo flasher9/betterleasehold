@@ -1,0 +1,137 @@
+---
+const questions = [
+  {
+    id: 'selfcontained',
+    legend: 'Is the block a self-contained building, or a self-contained part of one?',
+    hint: 'Structurally detached, or a vertical division that could be redeveloped independently and has independent services.',
+  },
+  {
+    id: 'longleases',
+    legend: 'Are at least two-thirds of the flats let on long leases?',
+    hint: 'A long lease normally means one originally granted for more than 21 years.',
+  },
+  {
+    id: 'commercial',
+    legend: 'Is 50% or less of the internal floor area in non-residential use?',
+    hint: 'Ignore common parts. The limit rose from 25% to 50% on 3 March 2025. If there is no commercial space at all, answer yes.',
+  },
+  {
+    id: 'participants',
+    legend: 'Will at least half of the flats in the block join the RTM company?',
+    hint: 'Counted at the date the claim notice is given. In a two-flat block, both must join.',
+  },
+  {
+    id: 'councillandlord',
+    legend: 'Is the landlord a local housing authority?',
+    hint: 'Council-owned blocks are outside the RTM scheme; different rights may apply.',
+    invert: true,
+  },
+  {
+    id: 'residentfreeholder',
+    legend:
+      'Is this a converted house of four flats or fewer where the freeholder, or an adult member of their family, has lived in one of the flats as their only or main home for the last 12 months?',
+    hint: 'This resident-landlord exception takes the building outside RTM.',
+    invert: true,
+  },
+];
+---
+
+<section class="checker" aria-labelledby="checker-heading">
+  <h2 id="checker-heading">Does your block qualify?</h2>
+  <p class="checker__intro">
+    Six questions, based on the qualifying conditions in Part 2 of the Commonhold and
+    Leasehold Reform Act 2002. Nothing you enter leaves your device or is stored.
+  </p>
+
+  <form id="eligibility">
+    {
+      questions.map((q) => (
+        <fieldset class="q" data-q={q.id} data-invert={q.invert ? 'true' : 'false'}>
+          <legend>
+            {q.legend}
+            <span class="q__hint">{q.hint}</span>
+          </legend>
+          <div class="opts">
+            <label>
+              <input type="radio" name={q.id} value="yes" />
+              <span>Yes</span>
+            </label>
+            <label>
+              <input type="radio" name={q.id} value="no" />
+              <span>No</span>
+            </label>
+            <label>
+              <input type="radio" name={q.id} value="unsure" />
+              <span>Not sure</span>
+            </label>
+          </div>
+        </fieldset>
+      ))
+    }
+  </form>
+
+  <div class="verdict" id="verdict" role="status" data-state="idle">
+    <p>Answer the questions above and a provisional result will appear here.</p>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('eligibility') as HTMLFormElement | null;
+  const verdict = document.getElementById('verdict');
+  if (form && verdict) {
+    const fieldsets = Array.from(form.querySelectorAll<HTMLFieldSetElement>('fieldset[data-q]'));
+
+    const render = () => {
+      const answers = fieldsets.map((fs) => {
+        const name = fs.dataset.q!;
+        const invert = fs.dataset.invert === 'true';
+        const picked = form.querySelector<HTMLInputElement>(`input[name="${name}"]:checked`);
+        return { name, invert, value: picked?.value ?? null, legend: fs.querySelector('legend')! };
+      });
+
+      const unanswered = answers.filter((a) => a.value === null).length;
+      // "Yes" is disqualifying on inverted questions.
+      const fails = answers.filter((a) => a.value === (a.invert ? 'yes' : 'no'));
+      const unsure = answers.filter((a) => a.value === 'unsure');
+
+      if (fails.length) {
+        verdict.dataset.state = 'blocked';
+        verdict.innerHTML =
+          '<p><strong>This block probably cannot claim RTM as things stand.</strong>' +
+          'One or more qualifying conditions is not met. That is not always the end of it ' +
+          'boundaries between “premises” can sometimes be drawn differently, and ' +
+          'participation levels change. Read the eligibility guide, then take advice ' +
+          'before spending money on a claim.</p>';
+        return;
+      }
+
+      if (unanswered > 0) {
+        verdict.dataset.state = 'idle';
+        verdict.innerHTML = `<p>${unanswered} question${
+          unanswered === 1 ? '' : 's'
+        } left to answer.</p>`;
+        return;
+      }
+
+      if (unsure.length) {
+        verdict.dataset.state = 'idle';
+        verdict.innerHTML =
+          '<p><strong>Nothing rules you out, but some facts need checking.</strong>' +
+          'Work through the eligibility guide for the points you were unsure about. ' +
+          'Floor-area splits and lease lengths are the two that most often need evidence ' +
+          'from the title and the leases.</p>';
+        return;
+      }
+
+      verdict.dataset.state = 'likely';
+      verdict.innerHTML =
+        '<p><strong>On these answers, the block looks likely to qualify.</strong>' +
+        'This is a provisional screen against the main conditions only, not a legal ' +
+        'opinion, and other exceptions exist. The next step is forming the RTM company ' +
+        'and getting the participation numbers confirmed in writing.</p>';
+    };
+
+    form.addEventListener('change', render);
+    render();
+  }
+</script>

@@ -1,0 +1,55 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import SourceList from '../components/SourceList.astro';
+import { getCollection } from 'astro:content';
+
+const { entry } = Astro.props;
+const data = entry.data;
+
+const siblings = (await getCollection('guides', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+const stated = data.lawStatedAt.toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<BaseLayout title={data.title} description={data.summary}>
+  <div class="shell guide">
+    <div class="guide__body">
+      <h1>{data.title}</h1>
+      <p class="hero__lede">{data.summary}</p>
+
+      <p class="stamp">
+        <span>Law stated as at <time datetime={data.lawStatedAt.toISOString()}>{stated}</time></span>
+        {data.reviewedBy && <span>Reviewed by {data.reviewedBy}</span>}
+        <span>England and Wales</span>
+      </p>
+
+      <slot />
+
+      <SourceList sources={data.sources} />
+    </div>
+
+    <aside class="guide__aside">
+      <p class="aside__title">Right to Manage</p>
+      <ul class="aside__list">
+        {
+          siblings.map((s) => (
+            <li>
+              <a
+                href={`/right-to-manage/${s.id}/`}
+                aria-current={s.id === entry.id ? 'page' : undefined}
+              >
+                {s.data.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </aside>
+  </div>
+</BaseLayout>

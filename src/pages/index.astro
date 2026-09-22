@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EligibilityChecker from '../components/EligibilityChecker.astro';
+import ProcessRail from '../components/ProcessRail.astro';
+---
+
+<BaseLayout
+  title="Take over the management of your block"
+  description="Free, referenced guidance on the Right to Manage for leaseholders in England and Wales: eligibility, notices, timings and handover."
+>
+  <div class="shell hero">
+    <h1>Take over the management of your block</h1>
+    <p class="hero__lede">
+      The Right to Manage lets leaseholders move management of their building away from the
+      freeholder without buying the freehold and without proving anyone did anything wrong.
+      Most blocks can do it themselves. Start by checking whether yours qualifies.
+    </p>
+  </div>
+
+  <div class="shell">
+    <EligibilityChecker />
+
+    <h2>What the process looks like</h2>
+    <p>
+      Almost every RTM claim that fails does so on a date or a defective notice rather than on
+      the merits. These are the fixed points the Act sets, in order.
+    </p>
+    <ProcessRail />
+
+    <div class="note">
+      <p>
+        Two changes took effect on 3 March 2025. The non-residential floor area limit rose from
+        25% to 50%, bringing many mixed-use blocks into scope for the first time, and the rule
+        making leaseholders liable for the landlord's costs of a claim was changed so that each
+        side normally bears its own. Older guidance you find elsewhere may not reflect this.
+      </p>
+    </div>
+
+    <h2>Doing it yourself</h2>
+    <p>
+      There is no requirement to instruct anybody. A group of leaseholders can incorporate the
+      company, serve the notices and take over management themselves, and this site is written
+      on the assumption that you will. Where a step genuinely benefits from professional help —
+      usually the floor-area assessment in a mixed-use block, or a contested tribunal
+      application it says so.
+    </p>
+  </div>
+</BaseLayout>

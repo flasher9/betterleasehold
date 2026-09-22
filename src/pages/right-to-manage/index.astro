@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProcessRail from '../../components/ProcessRail.astro';
+import { getCollection } from 'astro:content';
+
+const guides = (await getCollection('guides', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+
+<BaseLayout
+  title="Right to Manage"
+  description="A step-by-step guide to acquiring the Right to Manage, from qualifying conditions through to handover of funds and contracts."
+>
+  <div class="shell hero">
+    <h1>Right to Manage</h1>
+    <p class="hero__lede">
+      Everything a leaseholder needs to run a claim from first check to handover, referenced to
+      the statute at every step.
+    </p>
+  </div>
+
+  <div class="shell">
+    <ProcessRail />
+
+    <h2>Guides</h2>
+    <ul class="cards">
+      {
+        guides.map((g) => (
+          <li>
+            <h3>
+              <a href={`/right-to-manage/${g.id}/`}>{g.data.title}</a>
+            </h3>
+            <p>{g.data.summary}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</BaseLayout>

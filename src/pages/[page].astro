@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Placeholder shells. Each of these needs real content before launch the
+// privacy notice and terms in particular are not optional.
+const pages = {
+  about: {
+    title: 'About',
+    summary: 'Who writes this site, how it is funded, and how the commercial side is kept separate.',
+    body: 'To be written: who you are, your qualifications and experience, how the guidance is researched and reviewed, whether any referral fees are received and from whom, and how to complain.',
+  },
+  privacy: {
+    title: 'Privacy',
+    summary: 'What data this site collects and what happens to it.',
+    body: 'To be written: identity of the controller, ICO registration number, lawful basis, what analytics are used, retention periods, and how to exercise data subject rights.',
+  },
+  terms: {
+    title: 'Terms of use',
+    summary: 'The basis on which this guidance is published.',
+    body: 'To be written: no legal advice, no reliance, limitation of liability, accuracy and currency of content, and the licensing position on reuse of the site\u2019s own material.',
+  },
+  accessibility: {
+    title: 'Accessibility',
+    summary: 'How this site is built to be usable, and how to report a problem.',
+    body: 'To be written: target conformance level, known issues, and a contact route for accessibility problems.',
+  },
+  contact: {
+    title: 'Contact',
+    summary: 'How to get in touch.',
+    body: 'To be written.',
+  },
+} as const;
+
+export function getStaticPaths() {
+  return ['about', 'privacy', 'terms', 'accessibility', 'contact'].map((page) => ({
+    params: { page },
+  }));
+}
+
+const { page } = Astro.params;
+const content = pages[page as keyof typeof pages];
+---
+
+<BaseLayout title={content.title} description={content.summary}>
+  <div class="shell hero">
+    <h1>{content.title}</h1>
+    <p class="hero__lede">{content.summary}</p>
+  </div>
+  <div class="shell">
+    <div class="note">
+      <p>{content.body}</p>
+    </div>
+  </div>
+</BaseLayout>
