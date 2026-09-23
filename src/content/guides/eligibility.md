@@ -68,6 +68,11 @@ not create a second vote.
 ## Is the commercial space within the limit?
 ## Is the commercial space within the limit?
 ## Is the commercial space within the limit?
+## Is the commercial space within the limit?
+## Is the commercial space within the limit?
+## Is the commercial space within the limit?
+## Is the commercial space within the limit?
+## Is the commercial space within the limit?
 
 
 If part of the building is in non-residential use shops, offices, a surgery, a gym the
