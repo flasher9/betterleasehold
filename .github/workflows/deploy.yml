@@ -43,4 +43,4 @@ jobs:
           # The restricted account logs straight into the document root,
           # so "./" means "the site's own folder".
           server-dir: ./
-          dry-run: true
+          dry-run: false
