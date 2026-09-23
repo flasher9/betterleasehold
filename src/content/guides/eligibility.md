@@ -64,6 +64,11 @@ at the residue. Second, a flat can only have one qualifying tenant at a time, so
 not create a second vote.
 
 ## Is the commercial space within the limit?
+## Is the commercial space within the limit?
+## Is the commercial space within the limit?
+## Is the commercial space within the limit?
+## Is the commercial space within the limit?
+
 
 If part of the building is in non-residential use shops, offices, a surgery, a gym the
 internal floor area of those parts must not exceed 50% of the internal floor area of the whole
