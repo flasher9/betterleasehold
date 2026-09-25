@@ -13,6 +13,11 @@ export default defineConfig({
     format: 'directory',
   },
   integrations: [sitemap()],
+  vite: {
+    // Never inline scripts into the HTML: the CSP in public/.htaccess only
+    // allows script-src 'self', so inline scripts would be blocked.
+    build: { assetsInlineLimit: 0 },
+  },
   markdown: {
     shikiConfig: { theme: 'github-light' },
   },
