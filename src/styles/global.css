@@ -175,23 +175,24 @@ a:hover {
   text-underline-offset: 0.3em;
 }
 
+/* Sticky header that hides on scroll down and reappears on scroll up. */
+.masthead {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  transition: transform 0.25s ease;
+}
+
+.masthead--hidden {
+  transform: translateY(-100%);
+}
+
 .burger {
   display: none;
 }
 
-/* Phone: sticky header that hides on scroll down, burger menu. */
+/* Phone: burger menu. */
 @media (max-width: 40rem) {
-  .masthead {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    transition: transform 0.25s ease;
-  }
-
-  .masthead--hidden {
-    transform: translateY(-100%);
-  }
-
   .masthead__inner {
     align-items: center;
     padding-block: 0.8rem;
@@ -249,13 +250,6 @@ a:hover {
   .nav a {
     padding-block: 0.75rem;
     border-top: 1px solid var(--rule);
-  }
-}
-
-@media (max-width: 40rem) and (prefers-reduced-motion: reduce) {
-  .masthead,
-  .burger__bar {
-    transition: none;
   }
 }
 
