@@ -384,46 +384,136 @@ a:hover {
 }
 
 /* --- process rail ------------------------------------------------------- */
+/* A vertical sequence of cards joined by arrows. The day badge carries the
+   count from the notice of invitation (day 1). */
 
 .rail {
   list-style: none;
-  margin: 2rem 0;
+  margin: 2rem 0 0.8rem;
   padding: 0;
   max-width: 40rem;
-}
-
-.rail li {
-  display: grid;
-  grid-template-columns: 8.5rem 1fr;
-  gap: 1.2rem;
-  padding: 0.9rem 0;
-  border-top: 1px solid var(--rule);
   font-family: var(--sans);
   font-size: var(--t-sm);
 }
 
-.rail li:last-child {
-  border-bottom: 1px solid var(--rule);
+.rail__step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 9rem 1fr;
+  gap: 1rem;
+  align-items: start;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--rule);
+  background: var(--paper-raised);
 }
 
-.rail__clock {
-  color: var(--flag);
+/* Arrow to the next step: a short stem and a chevron head. */
+.rail__step + .rail__step {
+  margin-top: 1.9rem;
+}
+
+.rail__step + .rail__step::before,
+.rail__step + .rail__step::after {
+  content: '';
+  position: absolute;
+  left: 2rem;
+}
+
+.rail__step + .rail__step::before {
+  top: calc(-1.9rem - 1px);
+  height: 1.3rem;
+  border-left: 2px solid var(--seal);
+  transform: translateX(-1px);
+}
+
+.rail__step + .rail__step::after {
+  top: calc(-0.75rem - 1px);
+  border-left: 0.45rem solid transparent;
+  border-right: 0.45rem solid transparent;
+  border-top: 0.6rem solid var(--seal);
+  transform: translateX(-50%);
+}
+
+.rail__day {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--seal);
+  background: var(--paper-raised);
+  color: var(--seal);
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
+  line-height: 1.35;
 }
 
-.rail__clock--none {
-  color: var(--ink-soft);
+.rail__step--start {
+  border-color: var(--seal);
+  border-width: 2px;
+}
+
+.rail__step--start .rail__day {
+  border-color: var(--seal);
+  background: var(--seal);
+  color: #fff;
+}
+
+/* The tribunal step only happens on a disputed claim: shown as a side path. */
+.rail__step--branch {
+  margin-left: 2.5rem;
+  border-style: dashed;
+}
+
+/* Dashed arrow into the side path. */
+.rail__step + .rail__step--branch::before {
+  border-left-style: dashed;
+}
+
+/* The main line runs on past the side path, straight to the next step. */
+.rail__bypass {
+  position: absolute;
+  left: -0.5rem;
+  top: calc(-1.9rem - 1px);
+  bottom: 0;
+  border-left: 2px solid var(--seal);
+  transform: translateX(-1px);
+}
+
+.rail__step--branch + .rail__step::before {
+  top: calc(-1.9rem - 2px);
+  height: calc(1.3rem + 1px);
+}
+
+.rail__step--branch .rail__day {
+  border-style: dashed;
+  background: var(--paper-raised);
 }
 
 .rail__what {
   color: var(--ink);
 }
 
+/* Step titles are links: bold and underlined so they stand apart from the
+   green time-limit text beneath them. */
 .rail__what a {
-  text-decoration: none;
-}
-.rail__what a:hover {
+  color: var(--seal);
+  font-weight: 600;
   text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.rail__what a:hover {
+  color: var(--seal-bright);
+  text-decoration-thickness: 2px;
+}
+
+.rail__rule {
+  display: block;
+  color: var(--ink-soft);
+  margin-top: 0.3rem;
+}
+
+.rail__step--step .rail__rule {
+  color: var(--seal);
 }
 
 .rail__cite {
@@ -433,9 +523,26 @@ a:hover {
   margin-top: 0.15rem;
 }
 
-.rail li[data-current='true'] {
+.rail__note {
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  color: var(--ink-soft);
+  margin: 0 0 2rem;
+}
+
+.rail__step[data-current='true'] {
   background: var(--wash);
-  box-shadow: -0.7rem 0 0 var(--wash), 0.7rem 0 0 var(--wash);
+}
+
+@media (max-width: 40rem) {
+  .rail__step {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .rail__step--branch {
+    margin-left: 1.5rem;
+  }
 }
 
 /* --- guide page --------------------------------------------------------- */

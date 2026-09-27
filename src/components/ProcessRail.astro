@@ -1,56 +1,83 @@
 ---
 /**
- * The statutory sequence. `clock` is the interval the Act attaches to the step,
- * which is the thing leaseholders actually get wrong so it gets the colour.
+ * The statutory sequence as an arrow flow. Day counts assume the notice of
+ * invitation is served on day 1 and each minimum period is used exactly;
+ * `rule` is the time limit in plain terms. `kind` sets the badge style:
+ * prep (no badge), start (claim notice), step, branch (disputed claim only).
  */
-const steps = [
+type Kind = 'prep' | 'start' | 'step' | 'branch';
+
+const steps: {
+  day: string | null;
+  rule: string | null;
+  what: string;
+  href: string;
+  cite: string;
+  kind: Kind;
+}[] = [
   {
-    clock: null,
+    day: null,
+    rule: null,
     what: 'Check the building qualifies',
     href: '/right-to-manage/eligibility/',
     cite: 'CLRA 2002, ss.72-75',
+    kind: 'prep',
   },
   {
-    clock: null,
+    day: null,
+    rule: null,
     what: 'Incorporate the RTM company',
     href: '/right-to-manage/rtm-company/',
     cite: 'CLRA 2002, s.73; model articles',
+    kind: 'prep',
   },
   {
-    clock: 'at least 14 days before the claim notice',
+    day: 'Wait at least 14 days',
+    rule: 'before serving the claim notice',
     what: 'Serve the notice of invitation to participate on every qualifying tenant who is not already a member',
     href: '/right-to-manage/the-process/',
     cite: 'CLRA 2002, s.78',
+    kind: 'step',
   },
   {
-    clock: 'day 0',
+    day: 'Day 15',
+    rule: null,
     what: 'Serve the claim notice on the landlord, any manager and any third party to the leases',
     href: '/right-to-manage/the-process/',
     cite: 'CLRA 2002, ss.79-80',
+    kind: 'start',
   },
   {
-    clock: 'within 1 month',
-    what: 'Landlord may serve a counter-notice admitting or disputing the claim',
+    day: 'Days 15–46',
+    rule: 'must be served within 31 days (1 month)',
+    what: 'Wait for the landlord to serve a counter-notice',
     href: '/right-to-manage/the-process/',
     cite: 'CLRA 2002, s.84',
+    kind: 'step',
   },
   {
-    clock: 'within 2 months of a disputing counter-notice',
+    day: 'Only if disputed',
+    rule: 'within 2 months of a disputing counter-notice',
     what: 'Apply to the First-tier Tribunal for a determination, or the claim is deemed withdrawn',
     href: '/right-to-manage/the-process/',
     cite: 'CLRA 2002, s.84(3)',
+    kind: 'branch',
   },
   {
-    clock: 'not less than 3 months after the counter-notice date',
-    what: 'Acquisition date management functions transfer to the RTM company',
+    day: 'Days 46–139',
+    rule: 'the acquisition date in your claim notice stands: at least 93 days (3 months) to prepare for handover and take over management',
+    what: 'Landlord admits the claim',
     href: '/right-to-manage/the-process/',
-    cite: 'CLRA 2002, s.90',
+    cite: 'CLRA 2002, ss.80(7), 90',
+    kind: 'step',
   },
   {
-    clock: 'within 14 days of a request',
-    what: 'Landlord hands over accrued uncommitted service charges and contract information',
+    day: 'From acquisition',
+    rule: 'within 14 days of a request',
+    what: 'Handover of accrued service charges and contract information',
     href: '/right-to-manage/handover/',
     cite: 'CLRA 2002, ss.92-94',
+    kind: 'step',
   },
 ];
 
@@ -60,15 +87,19 @@ const { current = -1 } = Astro.props as { current?: number };
 <ol class="rail">
   {
     steps.map((s, i) => (
-      <li data-current={i === current ? 'true' : undefined}>
-        <span class={s.clock ? 'rail__clock' : 'rail__clock rail__clock--none'}>
-          {s.clock ?? '—'}
-        </span>
+      <li class={`rail__step rail__step--${s.kind}`} data-current={i === current ? 'true' : undefined}>
+        {s.kind === 'branch' && <span class="rail__bypass" aria-hidden="true" />}
+        <span class="rail__day-cell">{s.day && <span class="rail__day">{s.day}</span>}</span>
         <span class="rail__what">
           <a href={s.href}>{s.what}</a>
+          {s.rule && <span class="rail__rule">{s.rule}</span>}
           <span class="rail__cite">{s.cite}</span>
         </span>
       </li>
     ))
   }
 </ol>
+<p class="rail__note">
+  Day counts assume the invitation is served on day 1 and the shortest periods allowed. The Act
+  counts some periods in calendar months, so work from the exact dates in your notices.
+</p>
