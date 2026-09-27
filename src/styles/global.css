@@ -2,20 +2,24 @@
    betterleasehold.co.uk design tokens
 
    Palette reads from the material: lease deeds, land registry plans, statutory
-   notices. Cool paper rather than cream, a deep registry green for anything
+   notices. A plain white page, a deep registry green for anything
    structural or interactive, and a single oxblood reserved exclusively for
    statutory deadlines and risk. Nothing else is allowed to be red.
    --------------------------------------------------------------------------- */
 
 :root {
-  --paper: #f1f3ef;
+  --paper: #ffffff;
   --paper-raised: #ffffff;
+  --paper-tint: #f1f3ef;
   --wash: #e3e8e1;
   --ink: #1a2b25;
   --ink-soft: #4d5b55;
   --rule: #c6cec7;
   --seal: #0e4f3c;
   --seal-bright: #12695a;
+  /* Bright accent for the wordmark only. 3.6:1 on white: fine for large
+     bold text, too low for body text or links. */
+  --leaf: #1f9a4e;
   --flag: #8a2b22;
 
   --sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
@@ -131,7 +135,7 @@ a:hover {
 
 .masthead {
   border-bottom: 1px solid var(--rule);
-  background: var(--paper);
+  background: var(--paper-tint);
 }
 
 .masthead__inner {
@@ -152,7 +156,7 @@ a:hover {
 }
 
 .wordmark span {
-  color: var(--seal);
+  color: var(--leaf);
 }
 
 .nav {
@@ -355,7 +359,7 @@ a:hover {
   margin-top: 1.8rem;
   padding: 1rem 1.1rem;
   border-left: 3px solid var(--rule);
-  background: var(--paper);
+  background: var(--wash);
   font-family: var(--sans);
   font-size: var(--t-sm);
   max-width: 40rem;
