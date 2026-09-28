@@ -20,6 +20,13 @@
   /* Bright accent for the wordmark only. 3.6:1 on white: fine for large
      bold text, too low for body text or links. */
   --leaf: #1f9a4e;
+  /* For use on the dark green hero: 5.2:1 and 7.4:1 on --seal. */
+  --leaf-light: #5fd68a;
+  --on-seal-soft: #cfe9d9;
+  /* Marker highlight behind key phrases. */
+  --highlight: #bfe8cc;
+  /* Red for use on --seal only: 5.6:1. */
+  --flag-light: #ffb3a7;
   --flag: #8a2b22;
 
   --sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
@@ -273,6 +280,301 @@ a:hover {
   font-size: var(--t-md);
   color: var(--ink-soft);
   max-width: 32rem;
+}
+
+/* --- homepage ----------------------------------------------------------- */
+
+.home-hero {
+  background: var(--seal);
+  color: #fff;
+  padding-block: clamp(1.5rem, 4vw, 2.5rem) clamp(2.5rem, 6vw, 4rem);
+}
+
+.eyebrow {
+  margin: 0 0 1rem;
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--leaf-light);
+}
+
+.home-hero h1 {
+  font-size: clamp(2.2rem, 6vw, 3.4rem);
+  line-height: 1.05;
+  max-width: 18ch;
+  color: #fff;
+  margin-bottom: 1.2rem;
+}
+
+.home-hero h1 span {
+  display: block;
+  color: var(--leaf-light);
+}
+
+.home-hero__lede {
+  font-size: var(--t-md);
+  color: var(--on-seal-soft);
+  max-width: 34rem;
+}
+
+.home-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 2rem 0 0;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.7rem 1.2rem;
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  text-decoration: none;
+  border: 2px solid transparent;
+}
+
+.btn--primary {
+  background: var(--leaf-light);
+  color: var(--ink);
+}
+
+.btn--primary:hover {
+  background: #fff;
+}
+
+.btn--ghost {
+  border-color: var(--on-seal-soft);
+  color: #fff;
+}
+
+.btn--ghost:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.home-hero :focus-visible {
+  outline-color: #fff;
+}
+
+.facts {
+  list-style: none;
+  padding: 0;
+  margin: 3rem 0 0;
+  max-width: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1.2rem 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 1.5rem;
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+}
+
+.facts strong {
+  display: block;
+  color: #fff;
+  font-size: var(--t-base);
+}
+
+.facts span {
+  color: var(--on-seal-soft);
+}
+
+.home-section {
+  padding-block: clamp(2rem, 6vw, 3.5rem);
+}
+
+.home-section > h2:first-child {
+  margin-top: 0;
+}
+
+.home-band {
+  background: var(--paper-tint);
+  border-block: 1px solid var(--rule);
+}
+
+/* Big emotional one-liners between paragraphs. */
+.pull {
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--seal);
+  border-left: 4px solid var(--leaf);
+  padding-left: 1rem;
+  margin-block: 2rem;
+}
+
+.hl {
+  background: var(--highlight);
+  color: inherit;
+  padding-inline: 0.1em;
+}
+
+/* Stacked rows in a single panel: the problems, then the gains. */
+.rows {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 2rem;
+  max-width: 40rem;
+  border: 1px solid var(--rule);
+  background: var(--paper-raised);
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+}
+
+.rows li {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 1rem 1.2rem;
+}
+
+.rows li + li {
+  border-top: 1px solid var(--rule);
+}
+
+.rows strong {
+  font-size: var(--t-md);
+}
+
+.rows--pains {
+  border-left: 4px solid var(--ink-soft);
+}
+
+.rows--pains strong {
+  color: var(--ink);
+}
+
+.rows--gains {
+  border-left: 4px solid var(--leaf);
+}
+
+.rows--gains strong {
+  color: var(--seal);
+}
+
+@media (max-width: 40rem) {
+  .rows li {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+}
+
+/* The stake comparison: two bars, leaseholders against freeholder. */
+.stake {
+  margin: 1.5rem 0;
+  padding: 1.3rem 1.4rem;
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  max-width: 40rem;
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+}
+
+.stake__row {
+  display: grid;
+  grid-template-columns: 9rem 1fr 8rem;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.stake__bar {
+  height: 1.6rem;
+}
+
+.stake__bar--you {
+  width: 95%;
+  background: var(--seal);
+}
+
+.stake__bar--them {
+  width: 5%;
+  min-width: 4px;
+  background: var(--ink-soft);
+}
+
+.stake__value {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.stake__value small {
+  display: block;
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.stake figcaption {
+  margin-top: 0.4rem;
+  font-size: var(--t-xs);
+  color: var(--ink-soft);
+}
+
+@media (max-width: 40rem) {
+  .stake__row {
+    grid-template-columns: 1fr auto;
+  }
+
+  .stake__bar {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+
+.lever {
+  margin: 2rem 0 1rem;
+  padding: 1.4rem 1.5rem;
+  background: var(--seal);
+  color: var(--on-seal-soft);
+  max-width: 40rem;
+}
+
+.lever h3 {
+  margin-top: 0;
+  color: #fff;
+}
+
+.lever p {
+  margin-bottom: 0;
+}
+
+.lever strong {
+  color: var(--leaf-light);
+}
+
+.lever .lose {
+  color: var(--flag-light);
+  font-weight: 600;
+}
+
+#process,
+#qualify {
+  scroll-margin-top: 1rem;
+}
+
+/* The checker follows straight on from "Doing it yourself": no double gap. */
+#qualify {
+  padding-top: 0;
+}
+
+#qualify .checker {
+  margin-top: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 /* --- eligibility checker ------------------------------------------------ */

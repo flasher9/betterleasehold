@@ -8,24 +8,103 @@ import ProcessRail from '../components/ProcessRail.astro';
   title="Take over the management of your block"
   description="Free, referenced guidance on the Right to Manage for leaseholders in England and Wales: eligibility, notices, timings and handover."
 >
-  <div class="shell hero">
-    <h1>Take over the management of your block</h1>
-    <p class="hero__lede">
-      The Right to Manage lets leaseholders move management of their building away from the
-      freeholder without buying the freehold and without proving anyone did anything wrong.
-      Most blocks can do it themselves. Start by checking whether yours qualifies.
-    </p>
-  </div>
+  <section class="home-hero">
+    <div class="shell">
+      <p class="eyebrow">Right to Manage · England and Wales</p>
+      <h1>You pay for the building. <span>You should run it.</span></h1>
+      <p class="home-hero__lede">
+        The Right to Manage lets leaseholders take over the management of their block from the
+        freeholder, without buying the freehold and without proving anyone did anything wrong.
+      </p>
+      <p class="home-hero__actions">
+        <a class="btn btn--primary" href="#qualify">Check if your block qualifies</a>
+        <a class="btn btn--ghost" href="#process">See how it works</a>
+      </p>
+      <ul class="facts">
+        <li>
+          <strong>No fault to prove</strong>
+          <span>A no-fault right under the Commonhold and Leasehold Reform Act 2002.</span>
+        </li>
+        <li>
+          <strong>Up to 50% non-residential</strong>
+          <span>Mixed-use blocks now qualify up to 50% non-residential floor area.</span>
+        </li>
+        <li>
+          <strong>Your own costs only</strong>
+          <span>Since 3 March 2025, each side normally bears its own costs of a claim.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
 
-  <div class="shell">
-    <EligibilityChecker />
-
-    <h2>What the process looks like</h2>
+  <section class="shell home-section">
+    <h2>Sound familiar?</h2>
+    <ul class="rows rows--pains">
+      <li>
+        <strong>Opaque</strong>
+        <span>Managing agents you can't reach, and accounts you can't follow.</span>
+      </li>
+      <li>
+        <strong>Creeping</strong>
+        <span>Service charges that rise every year, with little to show for it.</span>
+      </li>
+      <li>
+        <strong>Absurd</strong>
+        <span>£1,000+ a year for gardening on a development with 20&nbsp;m² of grass.</span>
+      </li>
+    </ul>
     <p>
-      Almost every RTM claim that fails does so on a date or a defective notice rather than on
-      the merits. These are the fixed points the Act sets, in order.
+      If you're here, you have probably dealt with a management company that is mediocre at best,
+      negligent or absent, or fraudulent at worst.
     </p>
-    <ProcessRail />
+    <p class="pull">You don't need to prove any of it.</p>
+    <p>
+      The Right to Manage is a <mark class="hl">no-fault right</mark>. You bought your lease, you
+      pay the service charge, and you have more at stake in the building than anyone. Naturally, you
+      should have a real say in how it is run, and housing law is slowly catching up.
+    </p>
+  </section>
+
+  <section class="home-band">
+    <div class="shell home-section">
+      <h2>Who really holds the stake?</h2>
+      <p>Take a simple example: a block of 10 flats, each worth around £100,000.</p>
+
+      <figure class="stake">
+        <div class="stake__row">
+          <span class="stake__label">Leaseholders' flats</span>
+          <span class="stake__bar stake__bar--you"></span>
+          <span class="stake__value">£1,000,000 <small>about 95%</small></span>
+        </div>
+        <div class="stake__row">
+          <span class="stake__label">The freehold</span>
+          <span class="stake__bar stake__bar--them"></span>
+          <span class="stake__value">£50,000 <small>about 5%</small></span>
+        </div>
+        <figcaption>
+          Illustrative figures. Assumes all flats are on long leases with more than 100 years left
+          and low ground rent, and a freehold value of around £50,000 based on similar blocks.
+        </figcaption>
+      </figure>
+
+      <p>
+        Yet it is the freeholder, with about 5% of the value, who decides who manages the
+        building. Often a freehold company appoints a management company, and neither has ever set
+        foot in the block.
+      </p>
+      <p class="pull">Make it make sense.</p>
+    </div>
+  </section>
+
+  <section class="shell home-section">
+    <h2>It has never been easier</h2>
+    <p>
+      Few other European countries split ownership of a building this way. Leasehold is a relic
+      of an older, unfair housing system, and for decades the rules made it hard for leaseholders
+      to take control of blocks in which they hold <mark class="hl">by far the biggest stake</mark>.
+      Many of those barriers were kept in place under pressure from landlord interests.
+    </p>
+    <p>That is changing.</p>
 
     <div class="note">
       <p>
@@ -36,13 +115,67 @@ import ProcessRail from '../components/ProcessRail.astro';
       </p>
     </div>
 
+    <p>
+      More reform is on the way: the government has confirmed that the Commonhold and Leasehold
+      Reform Bill will be introduced in the 2026–27 parliamentary session. Follow it on the <a href="/legislation/">law tracker</a>.
+    </p>
+  </section>
+
+  <section class="home-band">
+    <div class="shell home-section" id="process">
+      <h2>What the process looks like</h2>
+      <p>
+        Almost every RTM claim that fails does so on a date or a defective notice rather than on
+        the merits. These are the fixed points the Act sets, in order.
+      </p>
+      <ProcessRail />
+    </div>
+  </section>
+
+  <section class="shell home-section">
+    <h2>What changes when you're in charge</h2>
+    <p>
+      I can't promise that taking over management will make everything smooth, or even better.
+      But in my experience, that is what usually happens.
+    </p>
+    <ul class="rows rows--gains">
+      <li>
+        <strong>Control</strong>
+        <span>You and your neighbours decide who does the work, what it costs and when.</span>
+      </li>
+      <li>
+        <strong>Lower costs</strong>
+        <span>
+          Staying on top of maintenance keeps bills down. In my experience, service charges can
+          fall by 30% to 50%, depending on how you run the block.
+        </span>
+      </li>
+      <li>
+        <strong>Value</strong>
+        <span>A well-run block with sensible service charges makes your own flat worth more.</span>
+      </li>
+    </ul>
+
+    <div class="lever">
+      <h3>The strongest lever you have: the authority to cancel a contract</h3>
+      <p>
+        Self-managing is not for everyone. If it does not suit you, your RTM company can appoint a
+        managing agent that <strong>reports to you</strong>. If they do a poor job, they <span class="lose">lose the contract</span>.
+      </p>
+    </div>
+
     <h2>Doing it yourself</h2>
     <p>
       There is no requirement to instruct anybody. A group of leaseholders can incorporate the
       company, serve the notices and take over management themselves, and this site is written
-      on the assumption that you will. Where a step genuinely benefits from professional help —
-      usually the floor-area assessment in a mixed-use block, or a contested tribunal
-      application it says so.
+      on the assumption that you will. It is here to guide you through every step. Where a step
+      genuinely benefits from professional help, usually the floor-area assessment in a
+      mixed-use block or a contested tribunal application, it says so.
     </p>
-  </div>
+    <p><a href="/right-to-manage/">Read the step-by-step guides →</a></p>
+  </section>
+
+  <section class="shell home-section" id="qualify">
+    <EligibilityChecker />
+  </section>
 </BaseLayout>
