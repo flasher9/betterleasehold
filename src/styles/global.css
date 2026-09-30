@@ -428,7 +428,7 @@ a:hover {
 
 .rows li {
   display: grid;
-  grid-template-columns: 8rem 1fr;
+  grid-template-columns: 10rem 1fr;
   gap: 1rem;
   align-items: baseline;
   padding: 1rem 1.2rem;
