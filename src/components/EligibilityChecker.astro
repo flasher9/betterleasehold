@@ -1,33 +1,46 @@
 ---
+/**
+ * Six-question RTM eligibility screen. With JavaScript it runs one question
+ * at a time with a progress bar, instant feedback and a results checklist;
+ * without it, all six questions show as a plain form. Nothing leaves the
+ * browser. `invert` marks questions where "yes" rules the block out; `short`
+ * is the condition's name in the results checklist.
+ */
 const questions = [
   {
     id: 'selfcontained',
+    short: 'Self-contained building',
     legend: 'Is the block a self-contained building, or a self-contained part of one?',
     hint: 'Structurally detached, or a vertical division that could be redeveloped independently and has independent services.',
   },
   {
     id: 'longleases',
+    short: 'Two-thirds of flats on long leases',
     legend: 'Are at least two-thirds of the flats let on long leases?',
     hint: 'A long lease normally means one originally granted for more than 21 years.',
   },
   {
     id: 'commercial',
+    short: 'Non-residential space 50% or less',
     legend: 'Is 50% or less of the internal floor area in non-residential use?',
     hint: 'Ignore common parts. The limit rose from 25% to 50% on 3 March 2025. If there is no commercial space at all, answer yes.',
   },
   {
     id: 'participants',
+    short: 'At least half the flats taking part',
     legend: 'Will at least half of the flats in the block join the RTM company?',
     hint: 'Counted at the date the claim notice is given. In a two-flat block, both must join.',
   },
   {
     id: 'councillandlord',
+    short: 'Landlord is not a council',
     legend: 'Is the landlord a local housing authority?',
     hint: 'Council-owned blocks are outside the RTM scheme; different rights may apply.',
     invert: true,
   },
   {
     id: 'residentfreeholder',
+    short: 'No resident-landlord exception',
     legend:
       'Is this a converted house of four flats or fewer where the freeholder, or an adult member of their family, has lived in one of the flats as their only or main home for the last 12 months?',
     hint: 'This resident-landlord exception takes the building outside RTM.',
@@ -36,39 +49,60 @@ const questions = [
 ];
 ---
 
-<section class="checker" aria-labelledby="checker-heading">
+<section class="checker" id="checker" aria-labelledby="checker-heading">
+  <p class="checker__eyebrow">Free pre-screen · 1 minute</p>
   <h2 id="checker-heading">Does your block qualify?</h2>
   <p class="checker__intro">
     Six questions, based on the qualifying conditions in Part 2 of the Commonhold and
     Leasehold Reform Act 2002. Nothing you enter leaves your device or is stored.
   </p>
 
+  <div class="checker__progress" hidden>
+    <div class="checker__bar"><span class="checker__fill"></span></div>
+    <p class="checker__count" aria-live="polite"></p>
+  </div>
+
   <form id="eligibility">
     {
-      questions.map((q) => (
-        <fieldset class="q" data-q={q.id} data-invert={q.invert ? 'true' : 'false'}>
+      questions.map((q, i) => (
+        <fieldset
+          class="q"
+          data-q={q.id}
+          data-short={q.short}
+          data-invert={q.invert ? 'true' : 'false'}
+        >
           <legend>
+            <span class="q__num">Question {i + 1} of {questions.length}</span>
             {q.legend}
             <span class="q__hint">{q.hint}</span>
           </legend>
           <div class="opts">
             <label>
               <input type="radio" name={q.id} value="yes" />
+              <span class="opt__icon" aria-hidden="true">✓</span>
               <span>Yes</span>
             </label>
             <label>
               <input type="radio" name={q.id} value="no" />
+              <span class="opt__icon" aria-hidden="true">✕</span>
               <span>No</span>
             </label>
             <label>
               <input type="radio" name={q.id} value="unsure" />
+              <span class="opt__icon" aria-hidden="true">?</span>
               <span>Not sure</span>
             </label>
           </div>
+          <p class="q__feedback" aria-live="polite"></p>
         </fieldset>
       ))
     }
   </form>
+
+  <div class="checker__nav" hidden>
+    <button type="button" class="checker__back">← Back</button>
+    <button type="button" class="checker__next">Next →</button>
+  </div>
 
   <div class="verdict" id="verdict" role="status" data-state="idle">
     <p>Answer the questions above and a provisional result will appear here.</p>
@@ -76,62 +110,171 @@ const questions = [
 </section>
 
 <script>
+  type Outcome = 'met' | 'fail' | 'unsure';
+
+  const root = document.getElementById('checker');
   const form = document.getElementById('eligibility') as HTMLFormElement | null;
   const verdict = document.getElementById('verdict');
-  if (form && verdict) {
+
+  if (root && form && verdict) {
     const fieldsets = Array.from(form.querySelectorAll<HTMLFieldSetElement>('fieldset[data-q]'));
+    const total = fieldsets.length;
+    const progress = root.querySelector<HTMLElement>('.checker__progress')!;
+    const fill = root.querySelector<HTMLElement>('.checker__fill')!;
+    const count = root.querySelector<HTMLElement>('.checker__count')!;
+    const nav = root.querySelector<HTMLElement>('.checker__nav')!;
+    const back = root.querySelector<HTMLButtonElement>('.checker__back')!;
+    const next = root.querySelector<HTMLButtonElement>('.checker__next')!;
 
-    const render = () => {
-      const answers = fieldsets.map((fs) => {
-        const name = fs.dataset.q!;
-        const invert = fs.dataset.invert === 'true';
-        const picked = form.querySelector<HTMLInputElement>(`input[name="${name}"]:checked`);
-        return { name, invert, value: picked?.value ?? null, legend: fs.querySelector('legend')! };
-      });
-
-      const unanswered = answers.filter((a) => a.value === null).length;
-      // "Yes" is disqualifying on inverted questions.
-      const fails = answers.filter((a) => a.value === (a.invert ? 'yes' : 'no'));
-      const unsure = answers.filter((a) => a.value === 'unsure');
-
-      if (fails.length) {
-        verdict.dataset.state = 'blocked';
-        verdict.innerHTML =
-          '<p><strong>This block probably cannot claim RTM as things stand.</strong>' +
-          'One or more qualifying conditions is not met. That is not always the end of it ' +
-          'boundaries between “premises” can sometimes be drawn differently, and ' +
-          'participation levels change. Read the eligibility guide, then take advice ' +
-          'before spending money on a claim.</p>';
-        return;
-      }
-
-      if (unanswered > 0) {
-        verdict.dataset.state = 'idle';
-        verdict.innerHTML = `<p>${unanswered} question${
-          unanswered === 1 ? '' : 's'
-        } left to answer.</p>`;
-        return;
-      }
-
-      if (unsure.length) {
-        verdict.dataset.state = 'idle';
-        verdict.innerHTML =
-          '<p><strong>Nothing rules you out, but some facts need checking.</strong>' +
-          'Work through the eligibility guide for the points you were unsure about. ' +
-          'Floor-area splits and lease lengths are the two that most often need evidence ' +
-          'from the title and the leases.</p>';
-        return;
-      }
-
-      verdict.dataset.state = 'likely';
-      verdict.innerHTML =
-        '<p><strong>On these answers, the block looks likely to qualify.</strong>' +
-        'This is a provisional screen against the main conditions only, not a legal ' +
-        'opinion, and other exceptions exist. The next step is forming the RTM company ' +
-        'and getting the participation numbers confirmed in writing.</p>';
+    const feedback: Record<Outcome, string> = {
+      met: '✓ That condition looks met.',
+      fail: '✕ This would rule the block out.',
+      unsure: '? Worth checking later. You can carry on.',
     };
 
-    form.addEventListener('change', render);
-    render();
+    const valueOf = (fs: HTMLFieldSetElement) =>
+      form.querySelector<HTMLInputElement>(`input[name="${fs.dataset.q}"]:checked`)?.value ?? null;
+
+    // "Yes" is disqualifying on inverted questions.
+    const outcomeOf = (fs: HTMLFieldSetElement): Outcome | null => {
+      const v = valueOf(fs);
+      if (v === null) return null;
+      if (v === 'unsure') return 'unsure';
+      const invert = fs.dataset.invert === 'true';
+      return v === (invert ? 'yes' : 'no') ? 'fail' : 'met';
+    };
+
+    const icon: Record<Outcome, string> = { met: '✓', fail: '✕', unsure: '?' };
+
+    const renderResult = () => {
+      const outcomes = fieldsets.map(outcomeOf);
+      const fails = outcomes.filter((o) => o === 'fail').length;
+      const unsure = outcomes.filter((o) => o === 'unsure').length;
+
+      let state: string;
+      let headline: string;
+      let body: string;
+
+      if (fails) {
+        state = 'blocked';
+        headline = 'This block probably cannot claim RTM as things stand.';
+        body =
+          'One or more qualifying conditions is not met. That is not always the end of it: ' +
+          'boundaries between “premises” can sometimes be drawn differently, and participation ' +
+          'levels change. Read the eligibility guide, then take advice before spending money on a claim.';
+      } else if (unsure) {
+        state = 'unsure';
+        headline = 'Nothing rules you out, but some facts need checking.';
+        body =
+          'Work through the eligibility guide for the points you were unsure about. Floor-area ' +
+          'splits and lease lengths are the two that most often need evidence from the title and the leases.';
+      } else {
+        state = 'likely';
+        headline = 'On these answers, the block looks likely to qualify.';
+        body =
+          'This is a provisional screen against the main conditions only, not a legal opinion, and ' +
+          'other exceptions exist. The next step is forming the RTM company and getting the ' +
+          'participation numbers confirmed in writing.';
+      }
+
+      const items = fieldsets
+        .map((fs, i) => {
+          const o = outcomes[i] ?? 'unsure';
+          return (
+            `<li data-outcome="${o}"><span class="verdict__icon" aria-hidden="true">${icon[o]}</span>` +
+            `<span class="verdict__label">${fs.dataset.short}</span>` +
+            `<button type="button" class="verdict__change" data-goto="${i}">Change</button></li>`
+          );
+        })
+        .join('');
+
+      verdict.dataset.state = state;
+      verdict.innerHTML =
+        `<p class="verdict__headline">${headline}</p><p>${body}</p>` +
+        `<ul class="verdict__list">${items}</ul>` +
+        '<p class="verdict__actions"><a href="/right-to-manage/eligibility/">Read the eligibility guide →</a>' +
+        '<button type="button" class="verdict__restart">Start again</button></p>';
+    };
+
+    // Progressive enhancement: from here on, one question at a time.
+    root.classList.add('checker--wizard');
+    progress.hidden = false;
+    nav.hidden = false;
+    let current = 0;
+    // Set when the user jumps back from the results to change one answer.
+    let reviewing = false;
+
+    const show = (i: number) => {
+      current = i;
+      const done = i >= total;
+      fieldsets.forEach((fs, j) => (fs.hidden = j !== i));
+      verdict.hidden = !done;
+      nav.hidden = done;
+
+      const answered = fieldsets.filter((fs) => valueOf(fs) !== null).length;
+      fill.style.transform = `scaleX(${done ? 1 : answered / total})`;
+      count.textContent = done ? 'Your result' : `Question ${i + 1} of ${total}`;
+
+      if (done) {
+        reviewing = false;
+        renderResult();
+        verdict.focus();
+        return;
+      }
+      back.disabled = i === 0;
+      next.disabled = valueOf(fieldsets[i]) === null;
+      next.textContent = i === total - 1 || reviewing ? 'See my result →' : 'Next →';
+    };
+
+    const updateFeedback = (fs: HTMLFieldSetElement) => {
+      const o = outcomeOf(fs);
+      if (o) fs.dataset.outcome = o;
+      else delete fs.dataset.outcome;
+      fs.querySelector('.q__feedback')!.textContent = o ? feedback[o] : '';
+    };
+
+    // Clicks advance automatically; keyboard users move on with Next.
+    let pointer = false;
+    form.addEventListener('pointerdown', () => (pointer = true));
+    form.addEventListener('keydown', () => (pointer = false));
+
+    let timer: number | undefined;
+    const advance = () => {
+      window.clearTimeout(timer);
+      show(reviewing ? total : current + 1);
+    };
+
+    form.addEventListener('change', (e) => {
+      const fs = (e.target as HTMLElement).closest<HTMLFieldSetElement>('fieldset[data-q]');
+      if (!fs) return;
+      updateFeedback(fs);
+      show(current);
+      window.clearTimeout(timer);
+      if (pointer) timer = window.setTimeout(advance, 700);
+    });
+
+    next.addEventListener('click', advance);
+    back.addEventListener('click', () => {
+      window.clearTimeout(timer);
+      show(current - 1);
+    });
+
+    verdict.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      if (t.matches('.verdict__change')) {
+        reviewing = true;
+        show(Number(t.dataset.goto));
+        fieldsets[current].querySelector<HTMLInputElement>('input:checked, input')?.focus();
+      } else if (t.matches('.verdict__restart')) {
+        form.reset();
+        fieldsets.forEach(updateFeedback);
+        show(0);
+        fieldsets[0].querySelector<HTMLInputElement>('input')?.focus();
+      }
+    });
+
+    verdict.tabIndex = -1;
+    fieldsets.forEach(updateFeedback);
+    show(0);
   }
 </script>

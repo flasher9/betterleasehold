@@ -578,18 +578,36 @@ html {
 }
 
 /* --- eligibility checker ------------------------------------------------ */
+/* Without JavaScript: all six questions as a form. With it (.checker--wizard):
+   one question at a time, progress bar, instant feedback, results checklist. */
 
 .checker {
   background: var(--paper-raised);
   border: 1px solid var(--rule);
-  border-top: 3px solid var(--seal);
-  padding: 1.6rem var(--gutter) 1.8rem;
+  border-radius: 14px;
+  box-shadow: 0 6px 24px rgba(20, 36, 30, 0.08);
+  padding: 1.8rem var(--gutter) 2rem;
   margin-block: 2rem 3rem;
+  max-width: 46rem;
+}
+
+.checker [hidden] {
+  display: none;
+}
+
+.checker__eyebrow {
+  margin: 0 0 0.4rem;
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--leaf);
 }
 
 .checker h2 {
   margin-top: 0;
-  font-size: var(--t-md);
+  font-size: var(--t-lg);
 }
 
 .checker__intro {
@@ -599,6 +617,34 @@ html {
   max-width: 40rem;
 }
 
+.checker__progress {
+  margin-top: 1.4rem;
+}
+
+.checker__bar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--wash);
+  overflow: hidden;
+}
+
+.checker__fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--seal), var(--leaf));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+
+.checker__count {
+  margin: 0.45rem 0 0;
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
 .q {
   border: 0;
   padding: 0;
@@ -606,11 +652,42 @@ html {
   max-width: 40rem;
 }
 
+.checker--wizard .q {
+  margin-top: 1.2rem;
+  animation: q-in 0.3s ease;
+}
+
+@keyframes q-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
 .q legend {
   font-family: var(--sans);
   font-weight: 500;
   padding: 0;
-  margin-bottom: 0.55rem;
+  margin-bottom: 0.8rem;
+}
+
+.checker--wizard .q legend {
+  font-size: var(--t-md);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.q__num {
+  display: block;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin-bottom: 0.2rem;
+}
+
+/* The progress bar already says which question this is. */
+.checker--wizard .q__num {
+  display: none;
 }
 
 .q__hint {
@@ -619,21 +696,49 @@ html {
   font-size: var(--t-sm);
   font-weight: 400;
   color: var(--ink-soft);
-  margin-top: 0.25rem;
+  margin-top: 0.35rem;
+  line-height: 1.5;
 }
 
 .opts {
-  display: flex;
-  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
 }
 
 .opts label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   font-family: var(--sans);
   font-size: var(--t-sm);
-  border: 1px solid var(--rule);
-  background: var(--paper);
-  padding: 0.35rem 0.95rem;
+  font-weight: 600;
+  border: 2px solid var(--rule);
+  border-radius: 10px;
+  background: var(--paper-raised);
+  padding: 0.75rem 0.9rem;
   cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+}
+
+.opts label:hover {
+  border-color: var(--seal);
+}
+
+.opts label:active {
+  transform: scale(0.98);
+}
+
+.opt__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  background: var(--wash);
+  color: var(--ink-soft);
+  font-size: var(--t-sm);
 }
 
 .opts input {
@@ -643,36 +748,130 @@ html {
   height: 0;
 }
 
-.opts input:checked + span {
-  font-weight: 600;
-}
-
-.opts label:has(input:checked) {
-  border-color: var(--seal);
-  background: var(--wash);
-  color: var(--seal);
-}
-
 .opts label:has(input:focus-visible) {
   outline: 2px solid var(--seal);
   outline-offset: 2px;
 }
 
+/* Selected answer, coloured by what it means for eligibility. */
+.opts label:has(input:checked) {
+  border-color: var(--seal);
+  background: #f2faf5;
+  color: var(--seal);
+}
+
+.opts label:has(input:checked) .opt__icon {
+  background: var(--seal);
+  color: #fff;
+}
+
+.q[data-outcome='fail'] .opts label:has(input:checked) {
+  border-color: var(--flag);
+  background: #fbf0ee;
+  color: var(--flag);
+}
+
+.q[data-outcome='fail'] .opts label:has(input:checked) .opt__icon {
+  background: var(--flag);
+}
+
+.q[data-outcome='unsure'] .opts label:has(input:checked) {
+  border-color: var(--ink-soft);
+  background: var(--paper-tint);
+  color: var(--ink);
+}
+
+.q[data-outcome='unsure'] .opts label:has(input:checked) .opt__icon {
+  background: var(--ink-soft);
+}
+
+.q__feedback {
+  min-height: 1.4em;
+  margin: 0.7rem 0 0;
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--seal);
+}
+
+.q[data-outcome='fail'] .q__feedback {
+  color: var(--flag);
+}
+
+.q[data-outcome='unsure'] .q__feedback {
+  color: var(--ink-soft);
+}
+
+.checker__nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.4rem;
+  max-width: 40rem;
+}
+
+.checker__nav button,
+.verdict__restart {
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  padding: 0.6rem 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.checker__back,
+.verdict__restart {
+  border: 1px solid var(--rule);
+  background: var(--paper-raised);
+  color: var(--ink);
+}
+
+.checker__next {
+  border: 1px solid var(--seal);
+  background: var(--seal);
+  color: #fff;
+}
+
+.checker__nav button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
 .verdict {
   margin-top: 1.8rem;
-  padding: 1rem 1.1rem;
-  border-left: 3px solid var(--rule);
+  padding: 1.2rem 1.3rem;
+  border: 1px solid var(--rule);
+  border-left: 5px solid var(--rule);
+  border-radius: 10px;
   background: var(--wash);
   font-family: var(--sans);
   font-size: var(--t-sm);
   max-width: 40rem;
 }
 
+.checker--wizard .verdict {
+  margin-top: 1.2rem;
+  animation: q-in 0.3s ease;
+}
+
+.verdict:focus {
+  outline: none;
+}
+
 .verdict[data-state='likely'] {
   border-left-color: var(--seal);
+  background: #f2faf5;
 }
+
 .verdict[data-state='blocked'] {
   border-left-color: var(--flag);
+  background: #fbf0ee;
+}
+
+.verdict[data-state='unsure'] {
+  border-left-color: var(--ink-soft);
+  background: var(--paper-tint);
 }
 
 .verdict p {
@@ -680,10 +879,89 @@ html {
   max-width: none;
 }
 
-.verdict strong {
-  display: block;
-  font-size: var(--t-base);
-  margin-bottom: 0.3rem;
+.verdict__headline {
+  font-size: var(--t-md);
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 0.5rem !important;
+}
+
+.verdict[data-state='likely'] .verdict__headline {
+  color: var(--seal);
+}
+
+.verdict[data-state='blocked'] .verdict__headline {
+  color: var(--flag);
+}
+
+.verdict__list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  max-width: none;
+  border-top: 1px solid var(--rule);
+}
+
+.verdict__list li {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.verdict__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  color: #fff;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  background: var(--ink-soft);
+}
+
+.verdict__list li[data-outcome='met'] .verdict__icon {
+  background: var(--seal);
+}
+
+.verdict__list li[data-outcome='fail'] .verdict__icon {
+  background: var(--flag);
+}
+
+.verdict__label {
+  flex: 1;
+}
+
+.verdict__change {
+  border: 0;
+  background: none;
+  padding: 0.2rem 0.3rem;
+  font: inherit;
+  font-size: var(--t-xs);
+  color: var(--seal);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.verdict__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.verdict__actions a {
+  font-weight: 600;
+}
+
+@media (max-width: 40rem) {
+  .opts {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* --- process rail ------------------------------------------------------- */
