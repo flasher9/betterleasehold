@@ -687,14 +687,14 @@ html {
 }
 
 /* --- process rail ------------------------------------------------------- */
-/* A vertical sequence of cards joined by arrows. The day badge carries the
-   count from the notice of invitation (day 1). */
+/* Numbered cards joined by arrows down the left. The numbered circles sit on
+   the arrow line; the day badge carries the count from the invitation (day 1). */
 
 .rail {
   list-style: none;
-  margin: 2rem 0 0.8rem;
+  margin: 2rem 0 1rem;
   padding: 0;
-  max-width: 40rem;
+  max-width: 42rem;
   font-family: var(--sans);
   font-size: var(--t-sm);
 }
@@ -702,12 +702,37 @@ html {
 .rail__step {
   position: relative;
   display: grid;
-  grid-template-columns: 9rem 1fr;
+  grid-template-columns: 2.2rem 9rem 1fr;
   gap: 1rem;
-  align-items: start;
-  padding: 0.9rem 1rem;
+  align-items: center;
+  padding: 0.9rem 1.1rem 0.9rem 0.9rem;
   border: 1px solid var(--rule);
+  border-radius: 10px;
   background: var(--paper-raised);
+  box-shadow: 0 1px 2px rgba(20, 36, 30, 0.06);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.rail__step:hover {
+  border-color: var(--seal);
+  box-shadow: 0 3px 10px rgba(20, 36, 30, 0.1);
+}
+
+/* Step number, centred on the arrow line (2rem from the card's left edge). */
+.rail__num {
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background: var(--seal);
+  color: #fff;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.rail__num:empty {
+  background: none;
 }
 
 /* Arrow to the next step: a short stem and a chevron head. */
@@ -739,22 +764,28 @@ html {
 
 .rail__day {
   display: inline-block;
-  padding: 0.2rem 0.55rem;
+  padding: 0.2rem 0.6rem;
   border: 1px solid var(--seal);
+  border-radius: 999px;
   background: var(--paper-raised);
   color: var(--seal);
+  font-size: var(--t-xs);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
+/* Day 15: the claim notice, the moment the clock starts. */
 .rail__step--start {
-  border-color: var(--seal);
-  border-width: 2px;
+  border: 2px solid var(--seal);
+  background: #f2faf5;
+}
+
+.rail__step--start .rail__num {
+  background: var(--leaf);
 }
 
 .rail__step--start .rail__day {
-  border-color: var(--seal);
   background: var(--seal);
   color: #fff;
 }
@@ -763,9 +794,9 @@ html {
 .rail__step--branch {
   margin-left: 2.5rem;
   border-style: dashed;
+  box-shadow: none;
 }
 
-/* Dashed arrow into the side path. */
 .rail__step + .rail__step--branch::before {
   border-left-style: dashed;
 }
@@ -787,7 +818,6 @@ html {
 
 .rail__step--branch .rail__day {
   border-style: dashed;
-  background: var(--paper-raised);
 }
 
 .rail__what {
@@ -795,9 +825,10 @@ html {
 }
 
 /* Step titles are links: bold and underlined so they stand apart from the
-   green time-limit text beneath them. */
+   time-limit text beneath them. */
 .rail__what a {
   color: var(--seal);
+  font-size: var(--t-base);
   font-weight: 600;
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -811,12 +842,8 @@ html {
 
 .rail__rule {
   display: block;
-  color: var(--ink-soft);
-  margin-top: 0.3rem;
-}
-
-.rail__step--step .rail__rule {
   color: var(--seal);
+  margin-top: 0.25rem;
 }
 
 .rail__cite {
@@ -824,6 +851,26 @@ html {
   color: var(--ink-soft);
   font-size: var(--t-xs);
   margin-top: 0.15rem;
+}
+
+.rail__edge {
+  max-width: 42rem;
+  margin: 1.5rem 0 0.8rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--leaf);
+  border-radius: 10px;
+  background: var(--paper-raised);
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+}
+
+.rail__edge strong {
+  color: var(--seal);
+}
+
+.rail__edge p {
+  margin: 0.3rem 0 0;
 }
 
 .rail__note {
@@ -839,8 +886,22 @@ html {
 
 @media (max-width: 40rem) {
   .rail__step {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
+    grid-template-columns: 2.2rem 1fr;
+    gap: 0.4rem 0.9rem;
+    align-items: start;
+  }
+
+  .rail__num {
+    grid-row: span 2;
+  }
+
+  .rail__day-cell:empty {
+    display: none;
+  }
+
+  .rail__day-cell,
+  .rail__what {
+    grid-column: 2;
   }
 
   .rail__step--branch {

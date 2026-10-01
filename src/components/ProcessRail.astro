@@ -33,8 +33,8 @@ const steps: {
   },
   {
     day: 'Wait at least 14 days',
-    rule: 'before serving the claim notice',
-    what: 'Serve the notice of invitation to participate on every qualifying tenant who is not already a member',
+    rule: null,
+    what: 'Officially invite flat owners to join the company',
     href: '/right-to-manage/the-process/',
     cite: 'CLRA 2002, s.78',
     kind: 'step',
@@ -42,31 +42,31 @@ const steps: {
   {
     day: 'Day 15',
     rule: null,
-    what: 'Serve the claim notice on the landlord, any manager and any third party to the leases',
+    what: 'Claim the right to manage your block',
     href: '/right-to-manage/the-process/',
     cite: 'CLRA 2002, ss.79-80',
     kind: 'start',
   },
   {
     day: 'Days 15–46',
-    rule: 'must be served within 31 days (1 month)',
-    what: 'Wait for the landlord to serve a counter-notice',
+    rule: 'up to 31 days',
+    what: "Wait for the landlord's response",
     href: '/right-to-manage/the-process/',
     cite: 'CLRA 2002, s.84',
     kind: 'step',
   },
   {
     day: 'Only if disputed',
-    rule: 'within 2 months of a disputing counter-notice',
-    what: 'Apply to the First-tier Tribunal for a determination, or the claim is deemed withdrawn',
+    rule: 'within 2 months, or the claim is treated as withdrawn',
+    what: 'Apply to the tribunal',
     href: '/right-to-manage/the-process/',
     cite: 'CLRA 2002, s.84(3)',
     kind: 'branch',
   },
   {
     day: 'Days 46–139',
-    rule: 'the acquisition date in your claim notice stands: at least 93 days (3 months) to prepare for handover and take over management',
-    what: 'Landlord admits the claim',
+    rule: 'at least 93 days (3 months) until you take over',
+    what: 'Landlord accepts: start preparing for handover',
     href: '/right-to-manage/the-process/',
     cite: 'CLRA 2002, ss.80(7), 90',
     kind: 'step',
@@ -74,21 +74,26 @@ const steps: {
   {
     day: 'From acquisition',
     rule: 'within 14 days of a request',
-    what: 'Handover of accrued service charges and contract information',
+    what: 'Receive service charge funds and contracts',
     href: '/right-to-manage/handover/',
     cite: 'CLRA 2002, ss.92-94',
     kind: 'step',
   },
 ];
 
+// Number the main-line steps; the side path is not numbered.
+let n = 0;
+const numbered = steps.map((s) => ({ ...s, num: s.kind === 'branch' ? null : ++n }));
+
 const { current = -1 } = Astro.props as { current?: number };
 ---
 
 <ol class="rail">
   {
-    steps.map((s, i) => (
+    numbered.map((s, i) => (
       <li class={`rail__step rail__step--${s.kind}`} data-current={i === current ? 'true' : undefined}>
         {s.kind === 'branch' && <span class="rail__bypass" aria-hidden="true" />}
+        <span class="rail__num" aria-hidden="true">{s.num}</span>
         <span class="rail__day-cell">{s.day && <span class="rail__day">{s.day}</span>}</span>
         <span class="rail__what">
           <a href={s.href}>{s.what}</a>
@@ -99,6 +104,14 @@ const { current = -1 } = Astro.props as { current?: number };
     ))
   }
 </ol>
+<div class="rail__edge">
+  <strong>Not every claim follows this order.</strong>
+  <p>
+    There are edge cases. If the landlord does not respond at all, for example, the claim simply
+    goes ahead and the acquisition date in your claim notice stands. If the landlord cannot be
+    found, you apply to the tribunal instead. See <a href="/right-to-manage/the-process/">the process guide</a> for more.
+  </p>
+</div>
 <p class="rail__note">
   Day counts assume the invitation is served on day 1 and the shortest periods allowed. The Act
   counts some periods in calendar months, so work from the exact dates in your notices.
