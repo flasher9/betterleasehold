@@ -1,4 +1,5 @@
 ---
+import ScrollDepth from '../../components/ScrollDepth.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProcessRail from '../../components/ProcessRail.astro';
 import { getCollection } from 'astro:content';
@@ -37,4 +38,5 @@ const guides = (await getCollection('guides', ({ data }) => !data.draft)).sort(
       }
     </ul>
   </div>
+  <ScrollDepth marks={[60]} />
 </BaseLayout>

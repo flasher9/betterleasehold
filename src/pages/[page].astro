@@ -1,4 +1,5 @@
 ---
+import ScrollDepth from '../components/ScrollDepth.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 // Placeholder shells. Each of these needs real content before launch the
@@ -51,4 +52,5 @@ const content = pages[page as keyof typeof pages];
       <p>{content.body}</p>
     </div>
   </div>
+  <ScrollDepth marks={[60]} />
 </BaseLayout>
