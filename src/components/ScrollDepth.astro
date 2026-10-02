@@ -1,0 +1,55 @@
+---
+/**
+ * Scroll-depth tracking for Umami. Add it to any page that should be tracked:
+ *
+ *   import ScrollDepth from '../components/ScrollDepth.astro';
+ *   <ScrollDepth />                         default milestones: 25, 50, 75, 100
+ *   <ScrollDepth marks={[50, 100]} />       custom milestones (percent)
+ *
+ * Each milestone sends one event, "Scroll 50%" etc., the first time it is
+ * passed. Umami attaches the page address; nothing personal is sent.
+ */
+interface Props {
+  marks?: number[];
+}
+
+const { marks = [25, 50, 75, 100] } = Astro.props;
+---
+
+<!-- Milestones are passed to the script through this attribute, because the
+     CSP blocks inline scripts. -->
+<div data-scroll-depth={marks.join(',')} hidden></div>
+
+<script>
+  type Umami = { track: (event: string) => void };
+  const umami = () => (window as unknown as { umami?: Umami }).umami;
+
+  const el = document.querySelector<HTMLElement>('[data-scroll-depth]');
+  const marks = (el?.dataset.scrollDepth ?? '').split(',').map(Number).filter((m) => m > 0);
+  const sent = new Set<number>();
+
+  // Umami loads with `defer`, so it may not exist yet; retry briefly.
+  const track = (name: string, tries = 10) => {
+    const u = umami();
+    if (u) u.track(name);
+    else if (tries > 0) window.setTimeout(() => track(name, tries - 1), 500);
+  };
+
+  const check = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    // A page that fits on screen counts as fully read.
+    const percent = max <= 0 ? 100 : (window.scrollY / max) * 100;
+    for (const m of marks) {
+      if (percent >= m - 1 && !sent.has(m)) {
+        sent.add(m);
+        track(`Scroll ${m}%`);
+      }
+    }
+  };
+
+  if (marks.length) {
+    // check() is cheap, so it runs on every scroll event without throttling.
+    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('load', check);
+  }
+</script>
