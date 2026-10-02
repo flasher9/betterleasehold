@@ -1504,6 +1504,69 @@ html {
   }
 }
 
+/* --- text pages (About, Privacy, Terms, Accessibility, Contact) --------- */
+/* Layout: src/layouts/PageLayout.astro. */
+
+.page-updated {
+  margin: 0.4rem 0 0;
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  color: var(--ink-soft);
+}
+
+.page-body {
+  max-width: 40rem;
+  padding-bottom: 4rem;
+}
+
+.page-body h2 {
+  margin-top: 1.8rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--rule);
+  font-size: var(--t-md);
+  color: var(--seal);
+}
+
+.page-body h3 {
+  margin-top: 1.5rem;
+  font-size: var(--t-base);
+}
+
+.page-body li {
+  margin-bottom: 0.35rem;
+}
+
+.page-note {
+  margin-top: 2rem;
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  color: var(--ink-soft);
+}
+
+.page-lead {
+  font-size: var(--t-md);
+  line-height: 1.5;
+}
+
+.page-callout {
+  margin: 1.5rem 0;
+  padding: 0.9rem 1.2rem;
+  border: 1px solid #cfe6d7;
+  border-left: 4px solid var(--seal);
+  border-radius: 10px;
+  background: #f4faf6;
+  font-family: var(--sans);
+  font-size: var(--t-sm);
+}
+
+.page-callout p {
+  margin: 0;
+}
+
+.page-callout strong {
+  color: var(--seal);
+}
+
 /* --- guide page --------------------------------------------------------- */
 
 .guide {

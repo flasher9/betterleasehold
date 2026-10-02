@@ -1,0 +1,26 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+
+// Add the site's contact email here. While it is empty, the page says
+// contact details are coming soon.
+const email = '';
+---
+
+<PageLayout title="Contact" summary="How to get in touch.">
+  {
+    email ? (
+      <p class="page-lead">
+        Email <a href={`mailto:${email}`}>{email}</a> and we will reply as soon as we can.
+      </p>
+    ) : (
+      <p class="page-lead">Contact details will be added here shortly.</p>
+    )
+  }
+
+  <div class="page-callout">
+    <p>
+      We cannot give advice on individual cases. For free, independent advice on your situation,
+      contact the <a href="https://www.lease-advice.org/" rel="noopener">Leasehold Advisory Service (LEASE)</a>.
+    </p>
+  </div>
+</PageLayout>

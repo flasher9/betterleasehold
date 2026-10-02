@@ -1,0 +1,31 @@
+---
+/**
+ * Layout for simple text pages (About, Privacy, Terms, Accessibility,
+ * Contact). Each page supplies its title, a one-line summary, an optional
+ * "last updated" date, and its text as children.
+ */
+import BaseLayout from './BaseLayout.astro';
+import ScrollDepth from '../components/ScrollDepth.astro';
+
+interface Props {
+  title: string;
+  summary: string;
+  updated?: string;
+}
+
+const { title, summary, updated } = Astro.props;
+---
+
+<BaseLayout title={title} description={summary}>
+  <div class="shell hero">
+    <h1>{title}</h1>
+    <p class="hero__lede">{summary}</p>
+    {updated && <p class="page-updated">Last updated {updated}</p>}
+  </div>
+  <div class="shell">
+    <article class="page-body">
+      <slot />
+    </article>
+  </div>
+  <ScrollDepth marks={[60]} />
+</BaseLayout>

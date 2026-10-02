@@ -1,0 +1,42 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+---
+
+<PageLayout
+  title="Accessibility"
+  summary="How this site is built to be usable by everyone, and how to report a problem."
+  updated="2 October 2026"
+>
+  <p class="page-lead">
+    We want everyone to be able to use this site, including people who use a keyboard, a screen
+    reader, magnification or a phone.
+  </p>
+
+  <h2>What we have done</h2>
+  <ul>
+    <li>Pages work with a keyboard, and a “Skip to content” link appears first.</li>
+    <li>Text and backgrounds are chosen for good contrast.</li>
+    <li>Pages can be zoomed and work on small screens without sideways scrolling.</li>
+    <li>Headings and lists are marked up so screen readers can navigate them.</li>
+    <li>The guides and law tracker can be read without JavaScript.</li>
+    <li>Animations are reduced if your device asks for less motion.</li>
+  </ul>
+
+  <h2>Our aim</h2>
+  <p>
+    We aim to meet the <a href="https://www.w3.org/TR/WCAG22/" rel="noopener">Web Content Accessibility Guidelines (WCAG) 2.2</a>
+    at level AA.
+  </p>
+
+  <h2>Known limitations</h2>
+  <p>
+    The site has not yet had an independent accessibility audit, so there may be problems we
+    have not found. Some links lead to other websites, which we do not control.
+  </p>
+
+  <h2>Report a problem</h2>
+  <p>
+    If something on this site is hard to use, please tell us through the <a href="/contact/">contact page</a>. Say which page you were on and what went wrong, and we
+    will try to fix it.
+  </p>
+</PageLayout>
