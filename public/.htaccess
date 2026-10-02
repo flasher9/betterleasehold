@@ -7,7 +7,7 @@
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
   # Only third-party script: Umami analytics (cookie-free)
   # an analytics domain: add it explicitly rather than relaxing to *.
-  Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self' https://cloud.umami.is; connect-src 'self' https://cloud.umami.is https://api-gateway.umami.dev; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+  Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self' https://cloud.umami.is; connect-src 'self' https://cloud.umami.is https://gateway.umami.is; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
 </IfModule>
 
 <IfModule mod_deflate.c>
