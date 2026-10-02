@@ -1,0 +1,154 @@
+# Law tracker entries, shown on /legislation/.
+#
+# HOW TO EDIT
+# - Add an entry: copy an existing one, give it a new unique id, change the text.
+# - Order does not matter: the page sorts entries newest first and groups them by year.
+# - The build checks every entry. A missing or misspelt field stops the build
+#   with a message saying which entry is wrong.
+#
+# FIELDS
+#   id:        unique short name, lowercase-with-dashes (never shown)
+#   date:      YYYY-MM-DD (use the 1st of the month if there is no exact day)
+#   dateLabel: optional; shown instead of the date, e.g. "September 2026"
+#   status:    in-force | passed | proposed
+#   title:     one line, plain English
+#   summary:   one or two sentences, plain English
+#   points:    optional bullet list
+#   rtm:       optional; what it means for a Right to Manage claim
+#   inForce:   optional list of { title, date } for an Act that is partly in force
+#   waiting:   optional list of { title, when } for parts of that Act not yet in force
+#   source:    { title, url } the primary source
+
+- id: managing-agents-2026
+  date: 2026-09-01
+  dateLabel: September 2026
+  status: proposed
+  title: Plans to license managing agents and cap fees
+  summary: The government announced plans to cap fees landlords charge, such as for permission to keep a pet, and to require managing agents to hold a licence overseen by a new regulator.
+  rtm: If your RTM company hires a managing agent, the agent would in future need to be licensed. Details and timing are still to be consulted on.
+  source:
+    title: LEASE, leasehold reforms
+    url: https://www.lease-advice.org/leasehold/leasehold-reforms/
+
+- id: committee-report-2026
+  date: 2026-05-27
+  status: proposed
+  title: MPs publish their review of the draft Bill
+  summary: A committee of MPs examined the draft Bill and published its findings. The government is now considering them.
+  source:
+    title: House of Commons Library
+    url: https://commonslibrary.parliament.uk/research-briefings/cbp-10653/
+
+- id: kings-speech-2026
+  date: 2026-05-13
+  status: proposed
+  title: Government confirms the new Bill is coming
+  summary: The King’s Speech confirmed the Commonhold and Leasehold Reform Bill will go before Parliament in the 2026–27 session.
+  rtm: The Law Commission’s suggested Right to Manage improvements are not in this Bill, so they would need a separate law.
+  source:
+    title: House of Commons Library
+    url: https://commonslibrary.parliament.uk/research-briefings/cbp-10653/
+
+- id: draft-bill-2026
+  date: 2026-01-27
+  status: proposed
+  title: Draft Commonhold and Leasehold Reform Bill published
+  summary: "An early version of the new law, published for MPs to review. It would:"
+  points:
+    - Cap ground rent on existing leases at £250 a year, falling to zero after 40 years (possibly from 2028).
+    - Make most new flats commonhold, where the owners jointly own the building (possibly from 2029).
+    - Replace forfeiture, the landlord’s power to take back a flat over a breach of the lease.
+    - Fix the 2024 Act so its lease extension and freehold changes can start.
+  source:
+    title: House of Commons Library
+    url: https://commonslibrary.parliament.uk/research-briefings/cbp-10653/
+
+- id: rtm-reforms-2025
+  date: 2025-03-03
+  status: in-force
+  title: Right to Manage becomes easier and cheaper
+  summary: Three changes from the 2024 Act started for RTM claims.
+  rtm: Blocks with up to 50% commercial space can now claim (previously 25%), you no longer normally pay the landlord’s costs of your claim, and the standard rules for RTM companies were updated.
+  source:
+    title: Leasehold and Freehold Reform Act 2024, ss.49-52
+    url: https://www.legislation.gov.uk/uksi/2025/131/made
+
+- id: two-year-rule-2025
+  date: 2025-01-31
+  status: in-force
+  title: No more two-year wait
+  summary: You no longer need to have owned your flat for two years before you can extend your lease or join in buying the freehold.
+  source:
+    title: Leasehold and Freehold Reform Act 2024, s.27
+    url: https://www.legislation.gov.uk/uksi/2025/57/made
+
+- id: lafra-2024
+  date: 2024-05-24
+  status: passed
+  title: Leasehold and Freehold Reform Act 2024 passed
+  summary: Parliament passed the Act, but most of it only starts when the government sets a date. Most lease extension and freehold changes also need fixes from the new Bill first.
+  inForce:
+    - title: No two-year wait to extend your lease or buy the freehold
+      date: January 2025
+    - title: Mixed-use blocks with up to 50% commercial space can claim RTM
+      date: March 2025
+    - title: No paying the landlord’s costs of an RTM claim
+      date: March 2025
+    - title: Stronger powers to make those responsible fix building safety defects
+      date: October 2024
+  waiting:
+    - title: 990-year lease extensions with no ground rent
+      when: After the new Bill
+    - title: No more “marriage value”, an extra cost on leases with 80 years or fewer left
+      when: After the new Bill
+    - title: Paying only your own costs when extending your lease or buying the freehold
+      when: After the new Bill
+    - title: Ground rent counted at no more than 0.1% of the property’s value in the price
+      when: After the new Bill
+    - title: Mixed-use blocks with up to 50% commercial space can buy the freehold
+      when: No date yet
+    - title: Clearer service charge bills and insurance commissions
+      when: From 2027
+    - title: Ban on new leasehold houses
+      when: No date yet
+  source:
+    title: Leasehold and Freehold Reform Act 2024
+    url: https://www.legislation.gov.uk/ukpga/2024/22/contents
+
+- id: ground-rent-2022
+  date: 2022-06-30
+  status: in-force
+  title: Ground rent ended for most new leases
+  summary: Most new long leases on homes granted from this date cannot charge any real ground rent. Existing leases are not affected.
+  source:
+    title: Leasehold Reform (Ground Rent) Act 2022
+    url: https://www.legislation.gov.uk/ukpga/2022/1/contents
+
+- id: building-safety-2022
+  date: 2022-06-28
+  status: in-force
+  title: Protection from building safety bills
+  summary: Limits on what many leaseholders can be charged to fix older building safety problems such as unsafe cladding.
+  rtm: If your block has safety defects, check how these protections apply before taking over management.
+  source:
+    title: Building Safety Act 2022
+    url: https://www.legislation.gov.uk/ukpga/2022/30/contents
+
+- id: law-commission-2020
+  date: 2020-07-21
+  status: proposed
+  title: Law Commission recommends RTM improvements
+  summary: The Law Commission, which advises the government on changing the law, recommended making RTM claims cheaper, quicker and more flexible.
+  rtm: A few ideas became law in 2024, such as the 50% limit and the costs rule. Most have not yet.
+  source:
+    title: Law Commission
+    url: https://lawcom.gov.uk/project/right-to-manage/
+
+- id: rtm-begins-2003
+  date: 2003-09-30
+  status: in-force
+  title: The Right to Manage begins in England
+  summary: Leaseholders gained the right to take over the management of their block through an RTM company, without having to prove the landlord did anything wrong.
+  source:
+    title: Commonhold and Leasehold Reform Act 2002
+    url: https://www.legislation.gov.uk/ukpga/2002/15/part/2/chapter/1

@@ -1187,6 +1187,323 @@ html {
   }
 }
 
+/* --- law tracker -------------------------------------------------------- */
+/* Content lives in src/content/law-tracker.yaml; entry markup in
+   src/components/LawEntry.astro. Kept deliberately plain. */
+
+.law {
+  font-family: var(--sans);
+}
+
+.law > * {
+  max-width: 46rem;
+}
+
+.law-checked {
+  margin: 0.4rem 0 0;
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  color: var(--ink-soft);
+}
+
+.law-today {
+  margin: 0.5rem 0 2.5rem;
+  padding: 1.1rem 1.3rem;
+  border: 1px solid #cfe6d7;
+  border-left: 4px solid var(--seal);
+  border-radius: 10px;
+  background: #f4faf6;
+}
+
+.law-today h2 {
+  margin: 0 0 0.6rem;
+  font-size: var(--t-md);
+  color: var(--seal);
+}
+
+.law-today ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: var(--t-sm);
+}
+
+.law-today li + li {
+  margin-top: 0.3rem;
+}
+
+.law-today__note {
+  margin: 0.7rem 0 0;
+  font-size: var(--t-xs);
+  color: var(--ink-soft);
+}
+
+/* Filter buttons. */
+.law-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 1.5rem;
+}
+
+.law-filter button {
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--paper-raised);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.law-filter button:hover {
+  border-color: var(--seal);
+}
+
+.law-filter button[aria-pressed='true'] {
+  border-color: var(--seal);
+  background: var(--seal);
+  color: #fff;
+}
+
+/* Status label on each entry. */
+.law-status {
+  display: inline-block;
+  padding: 0.1rem 0.55rem;
+  border: 1px solid var(--seal);
+  border-radius: 999px;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: var(--seal);
+  white-space: nowrap;
+}
+
+.law-status--in-force {
+  background: var(--seal);
+  color: #fff;
+}
+
+.law-status--proposed {
+  border-style: dashed;
+  border-color: var(--ink-soft);
+  color: var(--ink-soft);
+}
+
+/* Timeline: year label, then entries along a thin line. */
+.law-year {
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  gap: 1rem;
+}
+
+.law-year[hidden],
+.law-item[hidden] {
+  display: none;
+}
+
+.law-year__label {
+  margin: 0;
+  padding-top: 0.9rem;
+  font-size: var(--t-md);
+  color: var(--seal);
+}
+
+.law-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 1.4rem;
+  max-width: none;
+  border-left: 2px solid var(--rule);
+}
+
+.law-item {
+  position: relative;
+  margin: 0 0 1rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--seal);
+  border-radius: 10px;
+  background: var(--paper-raised);
+  font-size: var(--t-sm);
+}
+
+.law-item[data-status='passed'] {
+  border-left-color: var(--leaf);
+}
+
+.law-item[data-status='proposed'] {
+  border-left-color: var(--rule);
+}
+
+/* Dot on the timeline line. */
+.law-item::before {
+  content: '';
+  position: absolute;
+  top: 1.2rem;
+  left: calc(-1.4rem - 6px);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--seal);
+}
+
+.law-item[data-status='passed']::before {
+  background: var(--leaf);
+}
+
+.law-item[data-status='proposed']::before {
+  background: var(--rule);
+}
+
+.law-item p {
+  margin: 0 0 0.5rem;
+  max-width: none;
+}
+
+.law-item h3 {
+  margin: 0 0 0.3rem;
+  color: var(--seal);
+  font-size: var(--t-base);
+  line-height: 1.3;
+}
+
+.law-item h4 {
+  margin: 0.9rem 0 0.2rem;
+  font-size: var(--t-sm);
+  color: var(--seal);
+}
+
+.law-item h4.law-item__waiting-heading {
+  color: var(--ink-soft);
+}
+
+.law-item__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.8rem;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.law-item__points {
+  margin: 0 0 0.5rem;
+  padding-left: 1.1rem;
+  max-width: none;
+}
+
+.law-item__points li + li {
+  margin-top: 0.2rem;
+}
+
+/* In force / still waiting lists for a partly in-force Act. */
+.law-item__parts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: none;
+}
+
+.law-item__parts li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.35rem 0;
+  border-top: 1px solid var(--rule);
+}
+
+.law-item__when {
+  flex: none;
+  padding: 0.05rem 0.55rem;
+  border-radius: 999px;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  background: #e6f3ea;
+  color: var(--seal);
+  white-space: nowrap;
+}
+
+.law-item__parts--waiting .law-item__when {
+  background: var(--paper-tint);
+  color: var(--ink-soft);
+}
+
+.law-item__rtm {
+  margin-top: 0.7rem !important;
+  padding: 0.55rem 0.8rem;
+  border-left: 3px solid var(--leaf);
+  border-radius: 0 6px 6px 0;
+  background: #f4faf6;
+}
+
+.law-item__rtm strong {
+  color: var(--seal);
+}
+
+.law-item__source {
+  margin: 0.6rem 0 0 !important;
+  font-size: var(--t-xs);
+  color: var(--ink-soft);
+}
+
+.law-jargon {
+  margin: 2.5rem 0 1rem;
+  padding: 1.1rem 1.3rem;
+  border-radius: 10px;
+  background: var(--paper-tint);
+}
+
+.law-jargon h2 {
+  margin-top: 0;
+  font-size: var(--t-md);
+}
+
+.law-jargon dl {
+  display: grid;
+  grid-template-columns: 9rem 1fr;
+  gap: 0.4rem 1rem;
+  margin: 0;
+  font-size: var(--t-sm);
+}
+
+.law-jargon dt {
+  font-weight: 600;
+  color: var(--seal);
+}
+
+.law-jargon dd {
+  margin: 0;
+}
+
+.law-disclaimer {
+  margin: 2rem 0 3rem;
+  font-size: var(--t-xs);
+  color: var(--ink-soft);
+}
+
+@media (max-width: 40rem) {
+  .law-year {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+
+  .law-item__parts li {
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .law-jargon dl {
+    grid-template-columns: 1fr;
+  }
+
+  .law-jargon dd {
+    margin-bottom: 0.5rem;
+  }
+}
+
 /* --- guide page --------------------------------------------------------- */
 
 .guide {

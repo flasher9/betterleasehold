@@ -1,5 +1,5 @@
 import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
 
 // Every guidance page is forced to declare where its content came from and
 // when the law was last checked. If a page is missing either, the build fails.
@@ -29,4 +29,22 @@ const guides = defineCollection({
   }),
 });
 
-export const collections = { guides };
+// Law tracker entries, edited in src/content/law-tracker.yaml. The build fails
+// if an entry is missing a field or uses an unknown status.
+const lawTracker = defineCollection({
+  loader: file('./src/content/law-tracker.yaml'),
+  schema: z.object({
+    date: z.coerce.date(),
+    dateLabel: z.string().optional(),
+    status: z.enum(['in-force', 'passed', 'proposed']),
+    title: z.string(),
+    summary: z.string(),
+    points: z.array(z.string()).optional(),
+    rtm: z.string().optional(),
+    inForce: z.array(z.object({ title: z.string(), date: z.string() })).optional(),
+    waiting: z.array(z.object({ title: z.string(), when: z.string() })).optional(),
+    source: z.object({ title: z.string(), url: z.string().url() }),
+  }),
+});
+
+export const collections = { guides, lawTracker };

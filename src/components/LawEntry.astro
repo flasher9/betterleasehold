@@ -1,0 +1,81 @@
+---
+/**
+ * One law tracker entry. Content comes from src/content/law-tracker.yaml;
+ * this file only controls how an entry looks.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { statusLabels } from '../lib/law-tracker';
+
+interface Props {
+  entry: CollectionEntry<'lawTracker'>['data'];
+}
+
+const { entry: e } = Astro.props;
+
+const date =
+  e.dateLabel ??
+  e.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<li class="law-item" data-status={e.status}>
+  <p class="law-item__meta">
+    <time datetime={e.date.toISOString().slice(0, 10)}>{date}</time>
+    <span class={`law-status law-status--${e.status}`}>{statusLabels[e.status]}</span>
+  </p>
+  <h3>{e.title}</h3>
+  <p>{e.summary}</p>
+
+  {
+    e.points && (
+      <ul class="law-item__points">
+        {e.points.map((p) => (
+          <li>{p}</li>
+        ))}
+      </ul>
+    )
+  }
+
+  {
+    e.inForce && (
+      <>
+        <h4>Already in force</h4>
+        <ul class="law-item__parts">
+          {e.inForce.map((p) => (
+            <li>
+              <span>{p.title}</span>
+              <span class="law-item__when">{p.date}</span>
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+
+  {
+    e.waiting && (
+      <>
+        <h4 class="law-item__waiting-heading">Still waiting</h4>
+        <ul class="law-item__parts law-item__parts--waiting">
+          {e.waiting.map((p) => (
+            <li>
+              <span>{p.title}</span>
+              <span class="law-item__when">{p.when}</span>
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+
+  {
+    e.rtm && (
+      <p class="law-item__rtm">
+        <strong>For RTM:</strong> {e.rtm}
+      </p>
+    )
+  }
+
+  <p class="law-item__source">
+    Source: <a href={e.source.url} rel="noopener">{e.source.title}</a>
+  </p>
+</li>

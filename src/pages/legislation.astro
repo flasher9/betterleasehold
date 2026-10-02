@@ -1,65 +1,116 @@
 ---
+/**
+ * Law tracker. To change the entries, edit src/content/law-tracker.yaml;
+ * how each entry looks is in src/components/LawEntry.astro.
+ */
+import { getCollection } from 'astro:content';
 import ScrollDepth from '../components/ScrollDepth.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import LawEntry from '../components/LawEntry.astro';
+import { statusLabels, type LawStatus } from '../lib/law-tracker';
 
-const entries = [
-  {
-    date: '3 March 2025',
-    status: 'In force: ',
-    what: 'Non-residential limit on RTM claims raised from 25% to 50%; costs rules changed so each side normally bears its own costs; RTM company model articles amended.',
-    cite: 'Leasehold and Freehold Reform Act 2024, ss.49-52; SI 2025/131',
-    url: 'https://www.legislation.gov.uk/uksi/2025/131/made',
-  },
-  {
-    date: '27 January 2026',
-    status: 'Draft: ',
-    what: 'Draft Commonhold and Leasehold Reform Bill published for pre-legislative scrutiny. Commonhold as the default for new flats, a cap on existing ground rents, abolition of forfeiture.',
-    cite: 'HCLG Committee reported 27 May 2026',
-    url: 'https://commonslibrary.parliament.uk/research-briefings/cbp-10653/',
-  },
-  {
-    date: '13 May 2026',
-    status: 'Announced: ',
-    what: 'King\u2019s Speech confirmed the Bill will be introduced in the 2026\u201327 session. The Law Commission\u2019s Right to Manage recommendations are not in this Bill and are expected to need further legislation.',
-    cite: 'King\u2019s Speech 2026',
-    url: 'https://commonslibrary.parliament.uk/research-briefings/cbp-10653/',
-  },
+// Newest first, grouped by year.
+const entries = (await getCollection('lawTracker'))
+  .map((e) => e.data)
+  .sort((a, b) => b.date.getTime() - a.date.getTime());
+const years = [...new Set(entries.map((e) => e.date.getFullYear()))];
+
+const lastChecked = '2 October 2026';
+
+// Plain-English meanings of terms used on this page.
+const jargon = [
+  { term: 'Bill', meaning: 'A proposed law going through Parliament.' },
+  { term: 'Act', meaning: 'A Bill that Parliament has passed. Parts of it may start later.' },
+  { term: 'In force', meaning: 'Actually applies now.' },
+  { term: 'Commonhold', meaning: 'Owning a flat where the owners jointly own the building, with no landlord.' },
+  { term: 'Marriage value', meaning: 'An extra amount added to the price of extending a short lease.' },
 ];
 ---
 
 <BaseLayout
   title="Law tracker"
-  description="What has changed in leasehold law, what is in force, and what is still only a draft."
+  description="What has changed in leasehold law, what is in force, and what is still only proposed."
 >
   <div class="shell hero">
     <h1>Law tracker</h1>
     <p class="hero__lede">
-      Leasehold law is mid-reform and a lot of guidance online is out of date. This page records
-      what is actually in force, what is announced, and what is still a draft.
+      Leasehold law is changing and a lot of guidance online is out of date. This page shows what
+      already applies, what has been passed but is still waiting, and what is only proposed.
     </p>
+    <p class="law-checked">Last checked {lastChecked}</p>
   </div>
 
-  <div class="shell">
-    <ol class="rail">
+  <div class="shell law">
+    <section class="law-today" aria-labelledby="law-today-heading">
+      <h2 id="law-today-heading">Right to Manage today</h2>
+      <ul>
+        <li><strong>Up to 50% commercial space.</strong> Mixed-use blocks can now qualify.</li>
+        <li><strong>Pay your own costs.</strong> You no longer normally pay the landlord’s costs of a claim.</li>
+        <li><strong>Updated company rules.</strong> RTM companies use the updated standard rules.</li>
+      </ul>
+      <p class="law-today__note">All in force since 3 March 2025.</p>
+    </section>
+
+    <h2>Timeline</h2>
+    <div class="law-filter" role="group" aria-label="Filter by status">
+      <button type="button" data-filter="all" aria-pressed="true">All</button>
       {
-        entries.map((e) => (
-          <li>
-            <span class="rail__clock">{e.date}</span>
-            <span class="rail__what">
-              <a href={e.url} rel="noopener">
-                {e.status}
-              </a>
-              {e.what}
-              <span class="rail__cite">{e.cite}</span>
-            </span>
-          </li>
+        (Object.keys(statusLabels) as LawStatus[]).map((s) => (
+          <button type="button" data-filter={s} aria-pressed="false">
+            {statusLabels[s]}
+          </button>
         ))
       }
-    </ol>
-    <p>
-      Last checked 4 September 2026. Commencement dates move; check legislation.gov.uk before
-      relying on anything here.
+    </div>
+
+    {
+      years.map((y) => (
+        <section class="law-year">
+          <h2 class="law-year__label">{y}</h2>
+          <ol class="law-list">
+            {entries
+              .filter((e) => e.date.getFullYear() === y)
+              .map((e) => (
+                <LawEntry entry={e} />
+              ))}
+          </ol>
+        </section>
+      ))
+    }
+
+    <section class="law-jargon" aria-labelledby="law-jargon-heading">
+      <h2 id="law-jargon-heading">Jargon buster</h2>
+      <dl>
+        {
+          jargon.map((j) => (
+            <>
+              <dt>{j.term}</dt>
+              <dd>{j.meaning}</dd>
+            </>
+          ))
+        }
+      </dl>
+    </section>
+
+    <p class="law-disclaimer">
+      Start dates can change. Check legislation.gov.uk before relying on anything here. This page
+      is general information, not legal advice.
     </p>
   </div>
   <ScrollDepth marks={[60]} />
 </BaseLayout>
+
+<script>
+  // Status filter: show only entries with the chosen status, hiding years left empty.
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.law-filter button'));
+  const items = Array.from(document.querySelectorAll<HTMLElement>('.law-item'));
+  const years = Array.from(document.querySelectorAll<HTMLElement>('.law-year'));
+
+  const apply = (filter: string) => {
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === filter)));
+    items.forEach((i) => (i.hidden = filter !== 'all' && i.dataset.status !== filter));
+    years.forEach((y) => (y.hidden = !y.querySelector('.law-item:not([hidden])')));
+  };
+
+  buttons.forEach((b) => b.addEventListener('click', () => apply(b.dataset.filter ?? 'all')));
+</script>
